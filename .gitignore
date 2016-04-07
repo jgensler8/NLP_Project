@@ -58,3 +58,7 @@ buildNumber.properties
 ###
 # CoreNLP Models
 src/main/resources/stanford-english-corenlp-2016-01-10-models.jar
+
+###
+# OSX
+**.DS_STORE

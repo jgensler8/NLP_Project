@@ -56,24 +56,34 @@ public class WordNetExamples {
     private IndexWord CAT;
     private IndexWord FUNNY;
     private IndexWord DROLL;
+    private IndexWord PARIS;
+    private IndexWord ROME;
     private final static String MORPH_PHRASE = "running-away";
     private final Dictionary dictionary;
 
     public WordNetExamples(Dictionary dictionary) throws JWNLException {
         this.dictionary = dictionary;
-        ACCOMPLISH = dictionary.getIndexWord(POS.VERB, "accomplish");
-        DOG = dictionary.getIndexWord(POS.NOUN, "dog");
-        CAT = dictionary.lookupIndexWord(POS.NOUN, "cat");
-        FUNNY = dictionary.lookupIndexWord(POS.ADJECTIVE, "funny");
-        DROLL = dictionary.lookupIndexWord(POS.ADJECTIVE, "droll");
+//        ACCOMPLISH = dictionary.getIndexWord(POS.VERB, "accomplish");
+//        DOG = dictionary.getIndexWord(POS.NOUN, "dog");
+//        CAT = dictionary.lookupIndexWord(POS.NOUN, "cat");
+//        FUNNY = dictionary.lookupIndexWord(POS.ADJECTIVE, "funny");
+//        DROLL = dictionary.lookupIndexWord(POS.ADJECTIVE, "droll");
+
+        PARIS = dictionary.lookupIndexWord(POS.NOUN, "Paris");
+        ROME = dictionary.lookupIndexWord(POS.NOUN, "Rome");
     }
 
     public void go() throws JWNLException, CloneNotSupportedException {
-        demonstrateMorphologicalAnalysis(MORPH_PHRASE);
-        demonstrateListOperation(ACCOMPLISH);
-        demonstrateTreeOperation(DOG);
-        demonstrateAsymmetricRelationshipOperation(DOG, CAT);
-        demonstrateSymmetricRelationshipOperation(FUNNY, DROLL);
+//        demonstrateMorphologicalAnalysis(MORPH_PHRASE);
+//        demonstrateListOperation(ACCOMPLISH);
+//        demonstrateTreeOperation(DOG);
+//        demonstrateAsymmetricRelationshipOperation(DOG, CAT);
+//        demonstrateSymmetricRelationshipOperation(FUNNY, DROLL);
+
+        demonstrateTreeOperation(PARIS);
+        demonstrateTreeOperation(ROME);
+        demonstrateAsymmetricRelationshipOperation(PARIS, ROME);
+        demonstrateSymmetricRelationshipOperation(PARIS, ROME);
     }
 
     private void demonstrateMorphologicalAnalysis(String phrase) throws JWNLException {
