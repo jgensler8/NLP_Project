@@ -236,14 +236,14 @@ public class StanfordNLPExample {
     public static void main(String[] args) throws IOException {
         //Run by TA via: java -jar <filename>.jar input.txt
 
-            // File reader taken from: [STACKOVERFLOW LINK]
-            String inputFile;
-            String inputLine;
-            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/input.txt"));
-            //BufferedReader br = new BufferedReader(new FileReader(args[3]));
-            try {
-                StringBuilder sb = new StringBuilder();
-                inputLine = br.readLine();
+        // File reader taken from: [STACKOVERFLOW LINK]
+        String inputFile;
+        String inputLine;
+        BufferedReader br = new BufferedReader(new FileReader("src/main/resources/input.txt"));
+        //BufferedReader br = new BufferedReader(new FileReader(args[3]));
+        try {
+            StringBuilder sb = new StringBuilder();
+            inputLine = br.readLine();
 
             while (inputLine != null) {
                 sb.append(inputLine);
