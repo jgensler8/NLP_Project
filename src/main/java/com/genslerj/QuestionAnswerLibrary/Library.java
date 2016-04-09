@@ -6,8 +6,8 @@ package com.genslerj.QuestionAnswerLibrary;
 public class Library {
     public static QuestionAnswerPair questions[] = {
             // Yes/No Questions
-            new QuestionAnswerPair("Is Rome the capital of Italy?", "Yes"),
-            new QuestionAnswerPair("Is France in Europe?", "Yes"),
+            new QuestionAnswerPair("Is Rome the capital of Italy?", "Yes", Categories.GEOGRAPHY),
+            new QuestionAnswerPair("Is France in Europe?", "Yes", Categories.GEOGRAPHY),
             // Entity Questions
 //            new QuestionAnswerPair("What is the capital of Spain?", "Madrid")
     };

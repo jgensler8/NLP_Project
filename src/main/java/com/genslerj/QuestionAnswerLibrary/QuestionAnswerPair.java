@@ -6,10 +6,12 @@ package com.genslerj.QuestionAnswerLibrary;
 public class QuestionAnswerPair {
     String question;
     String answer;
+    String category;
 
-    public QuestionAnswerPair(String question, String answer) {
+    public QuestionAnswerPair(String question, String answer, String category) {
         this.question = question;
         this.answer = answer;
+        this.category = category;
     }
 
     public String getQuestion() {
@@ -19,4 +21,6 @@ public class QuestionAnswerPair {
     public String getAnswer() {
         return this.answer;
     }
+
+    public String getCategory() { return this.category; }
 }
