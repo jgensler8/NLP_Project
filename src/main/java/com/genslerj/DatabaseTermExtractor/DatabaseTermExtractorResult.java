@@ -5,11 +5,42 @@ package com.genslerj.DatabaseTermExtractor;
  */
 public class DatabaseTermExtractorResult {
 
+    private String category;
+    private String[] relatedStrings;
+
+    public DatabaseTermExtractorResult() {
+        category = "";
+    }
+
+    public DatabaseTermExtractorResult(DatabaseTermExtractorResultBuilder b) {
+        this.category = b.category;
+        this.relatedStrings = b.relatedStrings;
+    }
+
     public String getCategory() {
-        return "geography";
+        return this.category;
     }
 
     public String[] getRelatedStrings() {
-        return new String[]{ "Rome", "Paris" };
+        return this.relatedStrings;
+    }
+
+    public static class DatabaseTermExtractorResultBuilder {
+        private String category;
+        private String[] relatedStrings;
+
+        public DatabaseTermExtractorResultBuilder setCategory(String category) {
+            this.category = category;
+            return this;
+        }
+
+        public DatabaseTermExtractorResultBuilder setRelatedStrings(String[] relatedStrings) {
+            this.relatedStrings = relatedStrings;
+            return this;
+        }
+
+        public DatabaseTermExtractorResult build() {
+            return new DatabaseTermExtractorResult(this);
+        }
     }
 }
