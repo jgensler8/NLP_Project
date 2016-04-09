@@ -234,7 +234,7 @@ public class StanfordNLPExample {
     }
 
     public static void main(String[] args) throws IOException {
-        //            Run by TA via: java -jar <filename>.jar input.txt
+        //Run by TA via: java -jar <filename>.jar input.txt
 
             // File reader taken from: [STACKOVERFLOW LINK]
             String inputFile;

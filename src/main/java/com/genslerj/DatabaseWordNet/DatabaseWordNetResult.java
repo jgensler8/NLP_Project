@@ -5,9 +5,19 @@ package com.genslerj.DatabaseWordNet;
  */
 public class DatabaseWordNetResult {
 
+    /*
     // TODO: Oscar
     public String getCategory() {
         return "geography";
+    }
+    */
+    public String getCategory(String question) {
+        int geographyTally = 0;
+        int musicTally = 0;
+        int movieTally = 0;
+        String category = "";
+
+        return category;
     }
 
     // TODO: Oscar

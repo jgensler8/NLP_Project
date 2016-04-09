@@ -69,8 +69,8 @@ public class WordNetExamples {
 //        FUNNY = dictionary.lookupIndexWord(POS.ADJECTIVE, "funny");
 //        DROLL = dictionary.lookupIndexWord(POS.ADJECTIVE, "droll");
 
-        PARIS = dictionary.lookupIndexWord(POS.NOUN, "Paris");
-        ROME = dictionary.lookupIndexWord(POS.NOUN, "actor");
+        PARIS = dictionary.lookupIndexWord(POS.NOUN, "star");
+        ROME = dictionary.lookupIndexWord(POS.NOUN, "movies");
     }
 
     public void go() throws JWNLException, CloneNotSupportedException {
