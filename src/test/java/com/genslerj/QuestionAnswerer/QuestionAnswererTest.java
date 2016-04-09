@@ -10,6 +10,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
+import java.util.Arrays;
+
 import static org.mockito.Mockito.when;
 
 /**
@@ -84,7 +86,7 @@ public class QuestionAnswererTest {
         when(mockResult2.getCategory()).thenReturn(Categories.GEOGRAPHY);
         when(mockResult2.getRelatedStrings()).thenReturn(new String[]{"mountain", "lake", "world"});
         DatabaseWordNetResult[] corpus = new DatabaseWordNetResult[]{mockResult, mockResult2};
-        String question = "Did Daniel Craig play in a movie?";
+        String question = "Did Daniel Craig win an oscar?";
 
         QuestionAnswererResult result = new QuestionAnswerer.QuestionAnswererBuilder()
                 .setCorpus(corpus)
@@ -96,7 +98,7 @@ public class QuestionAnswererTest {
     }
 
     @Test
-    public void testMultiCategory_GeogrpahyQuestionShouldGuessGeographyCategory() {
+    public void testMultiCategory_GeographyQuestionShouldGuessGeographyCategory() {
         when(mockResult.getCategory()).thenReturn(Categories.MOVIES);
         when(mockResult.getRelatedStrings()).thenReturn(new String[]{"screen", "oscar", "Daniel Craig"});
         when(mockResult2.getCategory()).thenReturn(Categories.GEOGRAPHY);
@@ -110,17 +112,17 @@ public class QuestionAnswererTest {
                 .build()
                 .predict(question);
 
-        assert( result.getCategory().equals(Categories.MOVIES));
+        assert( result.getCategory().equals(Categories.GEOGRAPHY));
     }
 
     @Test
-    public void testWordOverlap_MovieQuestionShouldGuessGeographyCategory() {
+    public void testWordOverlap_MovieQuestionShouldGuessMovieCategory() {
         when(mockResult.getCategory()).thenReturn(Categories.MOVIES);
         when(mockResult.getRelatedStrings()).thenReturn(new String[]{"person", "oscar", "Daniel Craig"});
         when(mockResult2.getCategory()).thenReturn(Categories.GEOGRAPHY);
         when(mockResult2.getRelatedStrings()).thenReturn(new String[]{"person", "lake", "world"});
         DatabaseWordNetResult[] corpus = new DatabaseWordNetResult[]{mockResult, mockResult2};
-        String question = "Which person did Daniel Craig play in 2012?";
+        String question = "Which person won the oscar?";
 
         QuestionAnswererResult result = new QuestionAnswerer.QuestionAnswererBuilder()
                 .setCorpus(corpus)
@@ -138,7 +140,7 @@ public class QuestionAnswererTest {
         when(mockResult2.getCategory()).thenReturn(Categories.GEOGRAPHY);
         when(mockResult2.getRelatedStrings()).thenReturn(new String[]{"person", "lake", "world"});
         DatabaseWordNetResult[] corpus = new DatabaseWordNetResult[]{mockResult, mockResult2};
-        String question = "Which person created the lake?";
+        String question = "Which person created the world or lake?";
 
         QuestionAnswererResult result = new QuestionAnswerer.QuestionAnswererBuilder()
                 .setCorpus(corpus)
@@ -147,5 +149,14 @@ public class QuestionAnswererTest {
                 .predict(question);
 
         assert( result.getCategory().equals(Categories.GEOGRAPHY));
+    }
+
+    @Test
+    public void testStanfordSplitting() {
+        MLEStrategy s = new MLEStrategy();
+
+        String[] result = s.stanfordSplit("Which person created the world or lake?");
+
+        assert(Arrays.asList(result).contains("lake"));
     }
 }
