@@ -16,6 +16,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.io.*;
+import java.util.Scanner;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.Charset;
 
 public class StanfordNLPExample {
 
@@ -184,7 +193,8 @@ public class StanfordNLPExample {
         try
         {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:/Users/genslerj/Downloads/NLPProject/sqlite-db-dep/SqliteDatabases/WorldGeography.sqlite");
+            //connection = DriverManager.getConnection("jdbc:sqlite:/Users/genslerj/Downloads/NLPProject/sqlite-db-dep/SqliteDatabases/WorldGeography.sqlite");
+            connection = DriverManager.getConnection("jdbc:sqlite:/Users/Oscar/Downloads/NLP_Project/src/main/resources/SqliteDatabases/WorldGeography.sqlite");
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -223,24 +233,58 @@ public class StanfordNLPExample {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        //            Run by TA via: java -jar <filename>.jar input.txt
 
+            // File reader taken from: [STACKOVERFLOW LINK]
+            String inputFile;
+            String inputLine;
+            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/input.txt"));
+            //BufferedReader br = new BufferedReader(new FileReader(args[3]));
+            try {
+                StringBuilder sb = new StringBuilder();
+                inputLine = br.readLine();
 
+            while (inputLine != null) {
+                sb.append(inputLine);
+                sb.append(System.lineSeparator());
+                inputLine = br.readLine();
+            }
 
-        String text =
-                "Which album by Swift was released in 2014?";
-
-        List<Tree> trees = parse(text);
-        for (Tree tree : trees) {
-            System.out.println(tree);
+            inputFile = sb.toString();
         }
-        System.out.println("=====================================================");
+        finally {
+            br.close();
+        }
 
-        text =
-                "Victoria Chen, Chief Financial Officer of Megabucks Banking Corp since 2004, saw her pay jump 20%, to $1.3 million, as the 37-year-old also became the Denver-based financial-services company’s president. It has been ten years since she came to Megabucks from rival Lotsabucks.";
-        Map<Integer, CorefChain> graph = coreferenceResolution(text);
-        for (Entry<Integer, CorefChain> entry : graph.entrySet()) {
-            System.out.println(entry);
+        // Quick check of file contents
+        //System.out.println(inputFile);
+
+        // Spit out a single line (question) from the file
+        int questionNo = 0; String text;
+        String[] lines = inputFile.split("\n");
+        for (String s : lines) {
+            text = s;
+            questionNo++;
+            // Quick check line-by-line
+            System.out.println("<QUESTION> " + questionNo + ": " + text);
+            //}
+
+            //String text =
+            //        "Which album by Swift was released in 2014?";
+
+            List<Tree> trees = parse(text);
+            for (Tree tree : trees) {
+                System.out.println("<PARSETREE>\n" + tree);
+            }
+            System.out.println("=====================================================");
+
+            text =
+                    "Victoria Chen, Chief Financial Officer of Megabucks Banking Corp since 2004, saw her pay jump 20%, to $1.3 million, as the 37-year-old also became the Denver-based financial-services company’s president. It has been ten years since she came to Megabucks from rival Lotsabucks.";
+            Map<Integer, CorefChain> graph = coreferenceResolution(text);
+            //for (Entry<Integer, CorefChain> entry : graph.entrySet()) {
+            //    System.out.println(entry);
+            //}
         }
     }
 }

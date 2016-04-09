@@ -11,7 +11,8 @@ import static org.junit.Assert.*;
 public class DatabaseTermExtractorTest {
 
     String sqliteAffix = "jdbc:sqlite:";
-    String databasePath = "/Users/genslerj/Downloads/NLP_Project/src/main/resources/SqliteDatabases/music.sqlite";
+//    String databasePath = "/Users/genslerj/Downloads/NLP_Project/src/main/resources/SqliteDatabases/music.sqlite";
+    String databasePath = "/Users/Oscar/Downloads/NLP_Project/src/main/resources/SqliteDatabases/music.sqlite";
 //    String databasePath = "resources/SqliteDatabases/music.sqlite";
 
     @Test
