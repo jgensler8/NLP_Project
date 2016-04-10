@@ -269,7 +269,7 @@ public class StanfordNLPExample {
             // Quick check line-by-line
             System.out.println("<QUESTION> " + questionNo + ": " + text);
             //}
-
+            
             //String text =
             //        "Which album by Swift was released in 2014?";
 
