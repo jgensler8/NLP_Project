@@ -12,9 +12,7 @@ import com.genslerj.QuestionAnswerer.QuestionAnswererResult;
 import com.genslerj.TermFilter.TermFilterUtility;
 import com.sanchez.QuestionFileReader.QuestionFileReader;
 import com.sanchez.QuestionPrinter.QuestionPrinter;
-
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * Created by genslerj on 4/10/16.
@@ -60,6 +58,7 @@ public class Main {
         // Try answering a questions
         for(String question : questions) {
             QuestionAnswererResult result = answerer.predict(question);
+            // Format the output nicely, then print
             String outputString = QuestionPrinter.getQuestionOutput(question, result.getCategory(), TermFilterUtility.standfordGetParseTree(question));
             System.out.println(outputString);
         }

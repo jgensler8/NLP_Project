@@ -12,7 +12,7 @@ import java.util.Arrays;
 /**
  * Created by genslerj on 4/9/16.
  */
-public class MLEStrategyTest {
+public class MLEStrategy_BasicCountsTest {
 
 
     @Before
