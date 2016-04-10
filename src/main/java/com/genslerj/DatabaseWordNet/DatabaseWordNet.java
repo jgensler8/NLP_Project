@@ -2,11 +2,14 @@ package com.genslerj.DatabaseWordNet;
 
 import com.genslerj.DatabaseTermExtractor.DatabaseTermExtractorResult;
 import com.genslerj.QuestionAnswerer.MLEStrategy_BasicCounts;
+import com.genslerj.QuestionAnswerer.MLEStrategy_NN_NNP_Critical_Counts;
+import com.genslerj.TermFilter.NN_NNP_Filter;
 import com.genslerj.TermFilter.TermFilterUtility;
 import net.sf.extjwnl.JWNLException;
 import net.sf.extjwnl.data.IndexWord;
 import net.sf.extjwnl.data.POS;
 import net.sf.extjwnl.data.PointerUtils;
+import net.sf.extjwnl.data.Word;
 import net.sf.extjwnl.data.list.PointerTargetTree;
 import net.sf.extjwnl.dictionary.Dictionary;
 
@@ -44,8 +47,8 @@ public class DatabaseWordNet {
         }
         String[] result_array = new String[results.size()];
         result_array = results.toArray(result_array);
-//        return result_array;
-        return initialStrings;
+        return result_array;
+//        return initialStrings;
     }
 
     public String[] getWordNetWords(String initialString) {
@@ -65,16 +68,15 @@ public class DatabaseWordNet {
         } catch (NullPointerException e) {
             return new String[]{};
         }
-        // TODO: glossary
+        ArrayList<String> lemmas = new ArrayList<String>();
         String glossary = hyponyms.getRootNode().getSynset().getGloss();
-        // TODO: Lemmas (will have to be smart with this one)
-        String lemmas = hyponyms.getRootNode().getSynset().getWords().get(0).getLemma();
-        // TODO: Remove this
-        MLEStrategy_BasicCounts temp = new MLEStrategy_BasicCounts();
-        String[] naive_glossary = TermFilterUtility.stanfordSplit(glossary);
-        String[] naive_lemmas = TermFilterUtility.stanfordSplit(lemmas);
-        ArrayList<String> l = new ArrayList<String>(Arrays.asList(naive_glossary));
-        l.addAll(Arrays.asList(naive_lemmas));
+        for(Word word : hyponyms.getRootNode().getSynset().getWords()) {
+            lemmas.add(word.getLemma());
+        }
+        ArrayList<String> l = new ArrayList<String>();
+        String[] naive_glossary = new NN_NNP_Filter().filterSentence(glossary);
+        l.addAll(Arrays.asList(naive_glossary));
+        l.addAll(lemmas);
         String[] result_array = new String[l.size()];
         result_array = l.toArray(result_array);
         return result_array;

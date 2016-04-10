@@ -163,8 +163,6 @@ public class QuestionAnswererTest {
         DatabaseWordNetResult musicWordNetResult = new DatabaseWordNet().searchWith(musicTermExtractor);
         DatabaseWordNetResult geographyWordNetResult = new DatabaseWordNet().searchWith(geographyTermExtractor);
 
-        System.out.println(Arrays.toString(moviesWordNetResult.getRelatedStrings()));
-
         // Create the Question Answerer
         QuestionAnswerer answerer = new QuestionAnswerer.QuestionAnswererBuilder()
                 .setCorpus(new DatabaseWordNetResult[]{moviesWordNetResult, musicWordNetResult, geographyWordNetResult})
@@ -176,7 +174,7 @@ public class QuestionAnswererTest {
         assert(questionResult.getCategory().equals(Categories.MOVIES));
     }
 
-//    @Test
+    @Test
     public void addingAllDatabasesShouldPassMostLibraryExamples() throws Exception {
         // First, pull strings from the database
         DatabaseTermExtractorResult moviesTermExtractor = new DatabaseTermExtractor(DatabaseResources.MOVIES_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, Categories.MOVIES)
@@ -198,7 +196,7 @@ public class QuestionAnswererTest {
         // Create the Question Answerer
         QuestionAnswerer answerer = new QuestionAnswerer.QuestionAnswererBuilder()
                 .setCorpus(new DatabaseWordNetResult[]{moviesWordNetResult, musicWordNetResult, geographyWordNetResult})
-                .setStrategy(new MLEStrategy_NN_NNP_VERB_Counts())
+                .setStrategy(new MLEStrategy_NN_NNP_Critical_Counts_WithTieBreak())
                 .build();
 
         // Try answering a questions

@@ -6,7 +6,7 @@ import com.genslerj.DatabaseTermExtractor.DatabaseTermExtractorResult;
 import com.genslerj.DatabaseWordNet.DatabaseWordNet;
 import com.genslerj.DatabaseWordNet.DatabaseWordNetResult;
 import com.genslerj.QuestionAnswerLibrary.Categories;
-import com.genslerj.QuestionAnswerer.MLEStrategy_NN_NNP_VERB_Counts;
+import com.genslerj.QuestionAnswerer.MLEStrategy_NN_NNP_Critical_Counts_WithTieBreak;
 import com.genslerj.QuestionAnswerer.QuestionAnswerer;
 import com.genslerj.QuestionAnswerer.QuestionAnswererResult;
 import com.genslerj.TermFilter.TermFilterUtility;
@@ -52,7 +52,7 @@ public class Main {
         // Create the Question Answerer
         QuestionAnswerer answerer = new QuestionAnswerer.QuestionAnswererBuilder()
                 .setCorpus(new DatabaseWordNetResult[]{moviesWordNetResult, musicWordNetResult, geographyWordNetResult})
-                .setStrategy(new MLEStrategy_NN_NNP_VERB_Counts())
+                .setStrategy(new MLEStrategy_NN_NNP_Critical_Counts_WithTieBreak())
                 .build();
 
         // Try answering a questions

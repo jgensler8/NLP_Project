@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 public class MainTest {
 
     @Test
-    public void testSupplyingTooFewArguementsThrowsExceptionContainingError() {
+    public void testSupplyingTooFewArgumentsThrowsExceptionContainingError() {
         try {
             Main.main(new String[]{""});
         } catch (Exception e) {

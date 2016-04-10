@@ -29,6 +29,7 @@ public class DatabaseTermExtractor {
         for(String tableName : tables_arraylist) {
             String[] strings = this.getStringElementsFromTable(tableName);
             results_arraylist.addAll(Arrays.asList(strings));
+            results_arraylist.add(tableName);
         }
         // construct a DatabaseTermExtractorResult
         String[] result_array = new String[results_arraylist.size()];
@@ -91,5 +92,4 @@ public class DatabaseTermExtractor {
         return result_array;
     }
 
-//    public String[] ge
 }
