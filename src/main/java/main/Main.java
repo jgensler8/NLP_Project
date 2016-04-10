@@ -51,10 +51,6 @@ public class Main {
         DatabaseWordNetResult musicWordNetResult = new DatabaseWordNet().searchWith(musicTermExtractor);
         DatabaseWordNetResult geographyWordNetResult = new DatabaseWordNet().searchWith(geographyTermExtractor);
 
-        System.out.println(Arrays.toString(moviesWordNetResult.getRelatedStrings()));
-        System.out.println(Arrays.toString(musicTermExtractor.getRelatedStrings()));
-        System.out.println(Arrays.toString(geographyTermExtractor.getRelatedStrings()));
-
         // Create the Question Answerer
         QuestionAnswerer answerer = new QuestionAnswerer.QuestionAnswererBuilder()
                 .setCorpus(new DatabaseWordNetResult[]{moviesWordNetResult, musicWordNetResult, geographyWordNetResult})
