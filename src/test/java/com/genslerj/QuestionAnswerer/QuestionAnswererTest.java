@@ -176,8 +176,8 @@ public class QuestionAnswererTest {
         assert(questionResult.getCategory().equals(Categories.MOVIES));
     }
 
-    @Test
-    public void addingAllDatabasesShouldPassMostLibraryExmaples() throws Exception {
+//    @Test
+    public void addingAllDatabasesShouldPassMostLibraryExamples() throws Exception {
         // First, pull strings from the database
         DatabaseTermExtractorResult moviesTermExtractor = new DatabaseTermExtractor(DatabaseResources.MOVIES_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, Categories.MOVIES)
                 .generateResult();

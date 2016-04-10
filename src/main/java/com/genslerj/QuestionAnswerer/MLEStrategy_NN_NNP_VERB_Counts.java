@@ -2,7 +2,7 @@ package com.genslerj.QuestionAnswerer;
 
 import com.genslerj.DatabaseWordNet.DatabaseWordNetResult;
 import com.genslerj.TermFilter.NN_NNP_VERB_Filter;
-import com.sun.tools.javac.util.Pair;
+import org.javatuples.Pair;
 
 import java.util.*;
 
@@ -27,14 +27,14 @@ public class MLEStrategy_NN_NNP_VERB_Counts implements QuestionAnswererStrategy 
         Comparator naive_match_comparator = new Comparator<Pair<String,Number>>() {
 //            @Override
             public int compare(Pair<String,Number> o1, Pair<String,Number> o2) {
-                return o1.snd.intValue() - o2.snd.intValue();
+                return o1.getValue1().intValue() - o2.getValue1().intValue();
             }
         };
         Collections.sort(answers, naive_match_comparator);
 
         // Note: Collection.sort ascending
         // Collections index from zero
-        String bestCategory = answers.get(answers.size()-1).fst;
+        String bestCategory = answers.get(answers.size()-1).getValue0();
 
         return new QuestionAnswererResult.QuestionAnswererResultBuilder()
                 .setCategory(bestCategory)

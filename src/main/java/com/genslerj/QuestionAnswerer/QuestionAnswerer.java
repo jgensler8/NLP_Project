@@ -1,7 +1,5 @@
 package com.genslerj.QuestionAnswerer;
 
-import com.genslerj.CategoryNet.CategoryNetResult;
-import com.genslerj.DatabaseWordNet.DatabaseWordNet;
 import com.genslerj.DatabaseWordNet.DatabaseWordNetResult;
 
 /**
@@ -16,7 +14,7 @@ public class QuestionAnswerer {
         this.strategy = b.strategy;
     }
 
-    QuestionAnswererResult predict(String question) {
+    public QuestionAnswererResult predict(String question) {
         return this.strategy.predict(question, this.corpus);
     }
 
