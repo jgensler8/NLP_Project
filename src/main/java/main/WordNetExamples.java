@@ -113,6 +113,10 @@ public class WordNetExamples {
         PointerTargetTree hyponyms = PointerUtils.getHyponymTree(word.getSenses().get(0));
         System.out.println("Hyponyms of \"" + word.getLemma() + "\":");
         hyponyms.print();
+        System.out.print("Glossary: ");
+        System.out.println(hyponyms.getRootNode().getSynset().getGloss());
+        System.out.print("Lemmas: ");
+        System.out.println(hyponyms.getRootNode().getSynset().getWords().get(0).getLemma());
     }
 
     private void demonstrateAsymmetricRelationshipOperation(IndexWord start, IndexWord end) throws JWNLException, CloneNotSupportedException {

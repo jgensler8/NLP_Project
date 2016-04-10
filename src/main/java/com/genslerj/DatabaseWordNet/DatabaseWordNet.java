@@ -1,8 +1,8 @@
 package com.genslerj.DatabaseWordNet;
 
 import com.genslerj.DatabaseTermExtractor.DatabaseTermExtractorResult;
-import com.genslerj.QuestionAnswerer.MLEStrategy;
-import com.sun.xml.internal.xsom.impl.scd.Iterators;
+import com.genslerj.QuestionAnswerer.MLEStrategy_BasicCounts;
+import com.genslerj.TermFilter.TermFilterUtility;
 import net.sf.extjwnl.JWNLException;
 import net.sf.extjwnl.data.IndexWord;
 import net.sf.extjwnl.data.POS;
@@ -12,7 +12,6 @@ import net.sf.extjwnl.dictionary.Dictionary;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by genslerj on 4/4/16.
@@ -45,7 +44,8 @@ public class DatabaseWordNet {
         }
         String[] result_array = new String[results.size()];
         result_array = results.toArray(result_array);
-        return result_array;
+//        return result_array;
+        return initialStrings;
     }
 
     public String[] getWordNetWords(String initialString) {
@@ -70,9 +70,9 @@ public class DatabaseWordNet {
         // TODO: Lemmas (will have to be smart with this one)
         String lemmas = hyponyms.getRootNode().getSynset().getWords().get(0).getLemma();
         // TODO: Remove this
-        MLEStrategy temp = new MLEStrategy();
-        String[] naive_glossary = temp.stanfordSplit(glossary);
-        String[] naive_lemmas = temp.stanfordSplit(lemmas);
+        MLEStrategy_BasicCounts temp = new MLEStrategy_BasicCounts();
+        String[] naive_glossary = TermFilterUtility.stanfordSplit(glossary);
+        String[] naive_lemmas = TermFilterUtility.stanfordSplit(lemmas);
         ArrayList<String> l = new ArrayList<String>(Arrays.asList(naive_glossary));
         l.addAll(Arrays.asList(naive_lemmas));
         String[] result_array = new String[l.size()];

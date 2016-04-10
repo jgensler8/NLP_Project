@@ -81,7 +81,7 @@ public class DatabaseTermExtractor {
         ArrayList<String> results_arraylist = new ArrayList<String>();
         while(rs.next())
         {
-            if(rs.getString("type").contains(columnType))
+            if(rs.getString("type").toUpperCase().contains(columnType))
             {
                 results_arraylist.add(rs.getString("name"));
             }

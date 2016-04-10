@@ -1,5 +1,7 @@
 package main;
 
+import com.genslerj.QuestionAnswerLibrary.Library;
+import com.genslerj.QuestionAnswerLibrary.QuestionAnswerPair;
 import edu.stanford.nlp.dcoref.CorefChain;
 import edu.stanford.nlp.dcoref.CorefCoreAnnotations.CorefChainAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.*;
@@ -94,6 +96,7 @@ public class StanfordNLPExample {
         for (CoreLabel token : tokens) {
             // this is the text of the token
             String pos = token.get(PartOfSpeechAnnotation.class);
+//            token.get(TextAnnotation.class);
             result.add(pos);
         }
 
@@ -235,6 +238,12 @@ public class StanfordNLPExample {
 
     public static void main(String[] args) throws IOException {
         //Run by TA via: java -jar <filename>.jar input.txt
+
+        for(QuestionAnswerPair p : Library.questions) {
+            System.out.println(new StanfordNLPExample().parse(p.getQuestion()));
+            System.out.println(new StanfordNLPExample().ner(p.getQuestion()));
+            System.out.println(new StanfordNLPExample().posTagging(p.getQuestion()));
+        }
 
         // File reader taken from: [STACKOVERFLOW LINK]
         String inputFile;

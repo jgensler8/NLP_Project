@@ -36,5 +36,7 @@ public class Library {
             new QuestionAnswerPair("Where was Gaga born?",                          ANSWER_UNKNOWN,     Categories.MUSIC),
             new QuestionAnswerPair("In which album does Aura appear?",              ANSWER_UNKNOWN,     Categories.MUSIC),
             new QuestionAnswerPair("Which album by Swift was released in 2014?",    ANSWER_UNKNOWN,     Categories.MUSIC),
+            // Custom Questions
+            new QuestionAnswerPair("Daniel Craig",                ANSWER_UNKNOWN,     Categories.MOVIES),
     };
 }

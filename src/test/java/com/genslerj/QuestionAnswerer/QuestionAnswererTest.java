@@ -8,17 +8,13 @@ import com.genslerj.DatabaseWordNet.DatabaseWordNetResult;
 import com.genslerj.QuestionAnswerLibrary.Categories;
 import com.genslerj.QuestionAnswerLibrary.Library;
 import com.genslerj.QuestionAnswerLibrary.QuestionAnswerPair;
-import javafx.scene.chart.PieChart;
-import org.apache.xerces.impl.xs.SchemaSymbols;
+import com.genslerj.TermFilter.TermFilterUtility;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import java.util.Arrays;
-
-import static org.mockito.Mockito.when;
 
 /**
  * Created by genslerj on 4/3/16.
@@ -55,7 +51,7 @@ public class QuestionAnswererTest {
         DatabaseWordNetResult[] corpus = new DatabaseWordNetResult[]{mockResult};
         QuestionAnswerer b = new QuestionAnswerer.QuestionAnswererBuilder()
                 .setCorpus(corpus)
-                .setStrategy(new MLEStrategy())
+                .setStrategy(new MLEStrategy_BasicCounts())
                 .build();
     }
 
@@ -66,7 +62,7 @@ public class QuestionAnswererTest {
 
         QuestionAnswererResult result = new QuestionAnswerer.QuestionAnswererBuilder()
                 .setCorpus(corpus)
-                .setStrategy(new MLEStrategy())
+                .setStrategy(new MLEStrategy_BasicCounts())
                 .build()
                 .predict(question);
 
@@ -80,7 +76,7 @@ public class QuestionAnswererTest {
 
         QuestionAnswererResult result = new QuestionAnswerer.QuestionAnswererBuilder()
                 .setCorpus(corpus)
-                .setStrategy(new MLEStrategy())
+                .setStrategy(new MLEStrategy_BasicCounts())
                 .build()
                 .predict(question);
 
@@ -94,7 +90,7 @@ public class QuestionAnswererTest {
 
         QuestionAnswererResult result = new QuestionAnswerer.QuestionAnswererBuilder()
                 .setCorpus(corpus)
-                .setStrategy(new MLEStrategy())
+                .setStrategy(new MLEStrategy_BasicCounts())
                 .build()
                 .predict(question);
 
@@ -108,7 +104,7 @@ public class QuestionAnswererTest {
 
         QuestionAnswererResult result = new QuestionAnswerer.QuestionAnswererBuilder()
                 .setCorpus(corpus)
-                .setStrategy(new MLEStrategy())
+                .setStrategy(new MLEStrategy_BasicCounts())
                 .build()
                 .predict(question);
 
@@ -122,7 +118,7 @@ public class QuestionAnswererTest {
 
         QuestionAnswererResult result = new QuestionAnswerer.QuestionAnswererBuilder()
                 .setCorpus(corpus)
-                .setStrategy(new MLEStrategy())
+                .setStrategy(new MLEStrategy_BasicCounts())
                 .build()
                 .predict(question);
 
@@ -136,7 +132,7 @@ public class QuestionAnswererTest {
 
         QuestionAnswererResult result = new QuestionAnswerer.QuestionAnswererBuilder()
                 .setCorpus(corpus)
-                .setStrategy(new MLEStrategy())
+                .setStrategy(new MLEStrategy_BasicCounts())
                 .build()
                 .predict(question);
 
@@ -145,14 +141,14 @@ public class QuestionAnswererTest {
 
     @Test
     public void testStanfordSplitting() {
-        MLEStrategy s = new MLEStrategy();
+        MLEStrategy_BasicCounts s = new MLEStrategy_BasicCounts();
 
-        String[] result = s.stanfordSplit("Which person created the world or lake?");
+        String[] result = TermFilterUtility.stanfordSplit("Which person created the world or lake?");
 
         assert(Arrays.asList(result).contains("lake"));
     }
 
-    @Test
+    //@Test
     public void addingAllDatabasesShouldPassSimpleMovieExample() throws Exception {
         // First, pull strings from the database
         DatabaseTermExtractorResult moviesTermExtractor = new DatabaseTermExtractor(DatabaseResources.MOVIES_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, Categories.MOVIES)
@@ -172,7 +168,7 @@ public class QuestionAnswererTest {
         // Create the Question Answerer
         QuestionAnswerer answerer = new QuestionAnswerer.QuestionAnswererBuilder()
                 .setCorpus(new DatabaseWordNetResult[]{moviesWordNetResult, musicWordNetResult, geographyWordNetResult})
-                .setStrategy(new MLEStrategy())
+                .setStrategy(new MLEStrategy_BasicCounts())
                 .build();
 
         // Try answering a questions
@@ -196,18 +192,20 @@ public class QuestionAnswererTest {
         DatabaseWordNetResult geographyWordNetResult = new DatabaseWordNet().searchWith(geographyTermExtractor);
 
         System.out.println(Arrays.toString(moviesWordNetResult.getRelatedStrings()));
+        System.out.println(Arrays.toString(musicTermExtractor.getRelatedStrings()));
+        System.out.println(Arrays.toString(geographyTermExtractor.getRelatedStrings()));
 
         // Create the Question Answerer
         QuestionAnswerer answerer = new QuestionAnswerer.QuestionAnswererBuilder()
                 .setCorpus(new DatabaseWordNetResult[]{moviesWordNetResult, musicWordNetResult, geographyWordNetResult})
-                .setStrategy(new MLEStrategy())
+                .setStrategy(new MLEStrategy_NN_NNP_VERB_Counts())
                 .build();
 
         // Try answering a questions
         int correct = 0;
         int incorrect = 0;
         for(QuestionAnswerPair p : Library.questions) {
-            QuestionAnswererResult questionResult = answerer.predict("What year did DiCaprio win an oscar?");
+            QuestionAnswererResult questionResult = answerer.predict(p.getQuestion());
             if(questionResult.category.equals(p.getCategory())) {
                 correct += 1;
             }
@@ -216,7 +214,8 @@ public class QuestionAnswererTest {
                 incorrect += 1;
             }
         }
-        System.out.println(String.format("Correct: %d, Incorrect: %d", correct, incorrect));
-        assert(correct > incorrect);
+        float percentCorrect = ((float)correct)/(correct + incorrect);
+        System.out.println(String.format("Correct: %d, Incorrect: %d, Percent Correct %f", correct, incorrect, percentCorrect));
+        assert(percentCorrect >= .9);
     }
 }
