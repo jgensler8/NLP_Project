@@ -5,23 +5,48 @@ package com.genslerj.DatabaseWordNet;
  */
 public class DatabaseWordNetResult {
 
-    /*
-    // TODO: Oscar
-    public String getCategory() {
-        return "geography";
-    }
-    */
-    public String getCategory(String question) {
-        int geographyTally = 0;
-        int musicTally = 0;
-        int movieTally = 0;
-        String category = "";
+    String category;
+    String[] relatedStrings;
 
-        return category;
+    public DatabaseWordNetResult(DatabaseWordNetResultBuilder b) {
+        this.category = b.category;
+        this.relatedStrings = b.relatedStrings;
     }
+
+    public String getCategory() {
+        return this.category;
+    }
+
+//    public String getCategory(String question) {
+//        int geographyTally = 0;
+//        int musicTally = 0;
+//        int movieTally = 0;
+//        String category = "";
+//
+//        return category;
+//    }
 
     // TODO: Oscar
     public String[] getRelatedStrings() {
-        return new String[]{"some", "wordnet", "result"};
+        return this.relatedStrings;
+    }
+
+    public static class DatabaseWordNetResultBuilder {
+        String category;
+        String[] relatedStrings;
+
+        public DatabaseWordNetResultBuilder setCategory(String category) {
+            this.category = category;
+            return this;
+        }
+
+        public DatabaseWordNetResultBuilder setRelatedStrings(String[] relatedStrings) {
+            this.relatedStrings = relatedStrings;
+            return this;
+        }
+
+        public DatabaseWordNetResult build() {
+            return new DatabaseWordNetResult(this);
+        }
     }
 }

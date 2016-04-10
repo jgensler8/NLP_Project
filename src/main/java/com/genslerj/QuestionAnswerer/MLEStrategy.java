@@ -36,6 +36,7 @@ public class MLEStrategy implements QuestionAnswererStrategy {
         Collections.sort(answers, naive_match_comparator);
 
         // Note: Collection.sort ascending
+        // Collections index from zero
         String bestCategory = answers.get(answers.size()-1).fst;
 
         return new QuestionAnswererResult.QuestionAnswererResultBuilder()
@@ -46,7 +47,7 @@ public class MLEStrategy implements QuestionAnswererStrategy {
     public int countStringMatchesIn(String keyword, DatabaseWordNetResult r) {
         int count_matches = 0;
         for(String corpus_word : r.getRelatedStrings()) {
-            if(corpus_word.equals(keyword)) {
+            if(corpus_word != null && corpus_word.equals(keyword)) {
                 count_matches += 1;
             }
         }

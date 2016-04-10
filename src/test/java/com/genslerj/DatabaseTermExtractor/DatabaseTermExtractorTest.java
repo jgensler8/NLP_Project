@@ -14,20 +14,10 @@ import static org.junit.Assert.*;
  */
 public class DatabaseTermExtractorTest {
 
-    String sqliteAffix = "jdbc:sqlite:";
-    String musicDBPath = "/Users/genslerj/Downloads/NLP_Project/src/main/resources/SqliteDatabases/music.sqlite";
-    String geographyDBPath = "/Users/genslerj/Downloads/NLP_Project/src/main/resources/SqliteDatabases/WorldGeography.sqlite";
-    String moviesDBPath = "/Users/genslerj/Downloads/NLP_Project/src/main/resources/SqliteDatabases/oscar-movie_imdb.sqlite";
-//    String databasePath = "resources/SqliteDatabases/music.sqlite";
-    String musicConnectionString = String.format("%s%s", sqliteAffix, musicDBPath);
-    String geographyConnectionString = String.format("%s%s", sqliteAffix, geographyDBPath);
-    String moviesConnectionString = String.format("%s%s", sqliteAffix, moviesDBPath);
-    String databaseName = "main";
-
     @Test
     public void connectToFilesystemDatabaseShouldNotThrowException() {
         try {
-            DatabaseTermExtractor d = new DatabaseTermExtractor(musicConnectionString, databaseName, "music");
+            DatabaseTermExtractor d = new DatabaseTermExtractor(DatabaseResources.MUSIC_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, "music");
         } catch (Exception e)
         {
             System.out.println(e.toString());
@@ -39,7 +29,7 @@ public class DatabaseTermExtractorTest {
     @Test
     public void testGeographyDataBaseShouldReturnRome() throws Exception {
         // arrange
-        DatabaseTermExtractor d = new DatabaseTermExtractor(geographyConnectionString, databaseName, "geography");
+        DatabaseTermExtractor d = new DatabaseTermExtractor(DatabaseResources.GEOGRAPHY_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, "geography");
 
         // test
         DatabaseTermExtractorResult result = d.generateResult();
@@ -51,7 +41,7 @@ public class DatabaseTermExtractorTest {
     @Test
     public void testGeographyDataBaseShouldReturnParis() throws Exception {
         // arrange
-        DatabaseTermExtractor d = new DatabaseTermExtractor(geographyConnectionString, databaseName, "geography");
+        DatabaseTermExtractor d = new DatabaseTermExtractor(DatabaseResources.GEOGRAPHY_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, "geography");
 
         // test
         DatabaseTermExtractorResult result = d.generateResult();
@@ -63,7 +53,7 @@ public class DatabaseTermExtractorTest {
     @Test
     public void testGeographyDataBaseShouldReturnOttawa() throws Exception {
         // arrange
-        DatabaseTermExtractor d = new DatabaseTermExtractor(geographyConnectionString, databaseName, "geography");
+        DatabaseTermExtractor d = new DatabaseTermExtractor(DatabaseResources.GEOGRAPHY_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, "geography");
 
         // test
         DatabaseTermExtractorResult result = d.generateResult();
@@ -75,7 +65,7 @@ public class DatabaseTermExtractorTest {
     @Test
     public void testMoviesDataBaseShouldContainDanielCraig() throws Exception {
         // arrange
-        DatabaseTermExtractor d = new DatabaseTermExtractor(moviesConnectionString, databaseName, "movies");
+        DatabaseTermExtractor d = new DatabaseTermExtractor(DatabaseResources.MOVIES_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, "movies");
 
         // test
         DatabaseTermExtractorResult result = d.generateResult();
@@ -87,7 +77,7 @@ public class DatabaseTermExtractorTest {
     @Test
     public void testGetTablesFromGeographyDatabaseShouldContainCounties() throws Exception {
         // arrange
-        DatabaseTermExtractor d = new DatabaseTermExtractor(geographyConnectionString, databaseName, "geography");
+        DatabaseTermExtractor d = new DatabaseTermExtractor(DatabaseResources.GEOGRAPHY_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, "geography");
 
         // test
         String[] tableNames = d.getTableNames();
@@ -99,7 +89,7 @@ public class DatabaseTermExtractorTest {
     @Test
     public void testGetTablesFromMoviesDatabaseShouldContainsActor() throws Exception {
         // arrange
-        DatabaseTermExtractor d = new DatabaseTermExtractor(moviesConnectionString, databaseName, "movies");
+        DatabaseTermExtractor d = new DatabaseTermExtractor(DatabaseResources.MOVIES_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, "movies");
 
         // test
         String[] tableNames = d.getTableNames();
@@ -111,7 +101,7 @@ public class DatabaseTermExtractorTest {
     @Test
     public void testGetColumnsThatAreStringsFromCountriesDBShouldBeName() throws Exception {
         // arrange
-        DatabaseTermExtractor d = new DatabaseTermExtractor(geographyConnectionString, databaseName, "geography");
+        DatabaseTermExtractor d = new DatabaseTermExtractor(DatabaseResources.GEOGRAPHY_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, "geography");
 
         // test
         String[] columnNames = d.getColumnNameByType("Countries", SQLiteColumnTypes.VARCHAR);
@@ -123,7 +113,7 @@ public class DatabaseTermExtractorTest {
     @Test
     public void testGetElementsFromCountriesDatabaseShouldContainFrance() throws Exception {
         // arrange
-        DatabaseTermExtractor d = new DatabaseTermExtractor(geographyConnectionString, databaseName, "geography");
+        DatabaseTermExtractor d = new DatabaseTermExtractor(DatabaseResources.GEOGRAPHY_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, "geography");
 
         // test
         String[] columnNames = d.getStringElementsFromTable("Countries");

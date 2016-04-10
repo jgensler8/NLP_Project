@@ -58,6 +58,8 @@ public class WordNetExamples {
     private IndexWord DROLL;
     private IndexWord PARIS;
     private IndexWord ROME;
+    private IndexWord OSCAR;
+
     private final static String MORPH_PHRASE = "running-away";
     private final Dictionary dictionary;
 
@@ -69,8 +71,10 @@ public class WordNetExamples {
 //        FUNNY = dictionary.lookupIndexWord(POS.ADJECTIVE, "funny");
 //        DROLL = dictionary.lookupIndexWord(POS.ADJECTIVE, "droll");
 
-        PARIS = dictionary.lookupIndexWord(POS.NOUN, "star");
-        ROME = dictionary.lookupIndexWord(POS.NOUN, "movies");
+//        PARIS = dictionary.lookupIndexWord(POS.NOUN, "star");
+//        ROME = dictionary.lookupIndexWord(POS.NOUN, "movies");
+
+        OSCAR = dictionary.lookupIndexWord(POS.NOUN, "oscar");
     }
 
     public void go() throws JWNLException, CloneNotSupportedException {
@@ -80,10 +84,12 @@ public class WordNetExamples {
 //        demonstrateAsymmetricRelationshipOperation(DOG, CAT);
 //        demonstrateSymmetricRelationshipOperation(FUNNY, DROLL);
 
-        demonstrateTreeOperation(PARIS);
-        demonstrateTreeOperation(ROME);
-        demonstrateAsymmetricRelationshipOperation(PARIS, ROME);
-        demonstrateSymmetricRelationshipOperation(PARIS, ROME);
+//        demonstrateTreeOperation(PARIS);
+//        demonstrateTreeOperation(ROME);
+//        demonstrateAsymmetricRelationshipOperation(PARIS, ROME);
+//        demonstrateSymmetricRelationshipOperation(PARIS, ROME);
+
+        demonstrateTreeOperation(OSCAR);
     }
 
     private void demonstrateMorphologicalAnalysis(String phrase) throws JWNLException {

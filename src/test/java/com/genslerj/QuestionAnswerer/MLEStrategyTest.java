@@ -20,49 +20,54 @@ public class MLEStrategyTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Spy
-    DatabaseWordNetResult spyedResult = new DatabaseWordNetResult();
-
     @Test
     public void testCorpusMatchingIsCorrect() {
-        when(spyedResult.getRelatedStrings()).thenReturn(new String[]{"oscar", "Daniel Craig", "watch"});
-        when(spyedResult.getCategory()).thenReturn(Categories.MOVIES);
         MLEStrategy s = new MLEStrategy();
+        DatabaseWordNetResult result = new DatabaseWordNetResult.DatabaseWordNetResultBuilder()
+                .setCategory(Categories.MOVIES)
+                .setRelatedStrings(new String[]{"oscar", "Daniel Craig", "watch"})
+                .build();
 
-        int numberOfMatches = s.countStringMatchesIn("oscar", spyedResult);
+        int numberOfMatches = s.countStringMatchesIn("oscar", result);
 
         assert(numberOfMatches == 1);
     }
 
     @Test
     public void testCorpusMatchingMultipleIsCorrect() {
-        when(spyedResult.getRelatedStrings()).thenReturn(new String[]{"oscar", "Daniel Craig", "watch", "oscar"});
-        when(spyedResult.getCategory()).thenReturn(Categories.MOVIES);
         MLEStrategy s = new MLEStrategy();
+        DatabaseWordNetResult result = new DatabaseWordNetResult.DatabaseWordNetResultBuilder()
+                .setCategory(Categories.MOVIES)
+                .setRelatedStrings(new String[]{"oscar", "Daniel Craig", "watch", "oscar"})
+                .build();
 
-        int numberOfMatches = s.countStringMatchesIn("oscar", spyedResult);
+        int numberOfMatches = s.countStringMatchesIn("oscar", result);
 
         assert(numberOfMatches == 2);
     }
 
     @Test
     public void testCountAllStringMatchesInDuplicates() {
-        when(spyedResult.getRelatedStrings()).thenReturn(new String[]{"oscar", "Daniel Craig", "watch", "oscar"});
-        when(spyedResult.getCategory()).thenReturn(Categories.MOVIES);
         MLEStrategy s = new MLEStrategy();
+        DatabaseWordNetResult result = new DatabaseWordNetResult.DatabaseWordNetResultBuilder()
+                .setCategory(Categories.MOVIES)
+                .setRelatedStrings(new String[]{"oscar", "Daniel Craig", "watch", "oscar"})
+                .build();
 
-        int numberOfMatches = s.countAllStringMatchesIn(new String[]{"oscar","watch"}, spyedResult);
+        int numberOfMatches = s.countAllStringMatchesIn(new String[]{"oscar","watch"}, result);
 
         assert(numberOfMatches == 3);
     }
 
     @Test
     public void testCountAllStringMatchesIn() {
-        when(spyedResult.getRelatedStrings()).thenReturn(new String[]{"oscar", "Daniel Craig", "watch"});
-        when(spyedResult.getCategory()).thenReturn(Categories.MOVIES);
         MLEStrategy s = new MLEStrategy();
+        DatabaseWordNetResult result = new DatabaseWordNetResult.DatabaseWordNetResultBuilder()
+                .setCategory(Categories.MOVIES)
+                .setRelatedStrings(new String[]{"oscar", "Daniel Craig", "watch"})
+                .build();
 
-        int numberOfMatches = s.countAllStringMatchesIn(new String[]{"oscar","watch"}, spyedResult);
+        int numberOfMatches = s.countAllStringMatchesIn(new String[]{"oscar","watch"}, result);
 
         assert(numberOfMatches == 2);
     }
