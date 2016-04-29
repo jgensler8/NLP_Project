@@ -2,6 +2,7 @@ package main;
 
 import com.genslerj.QuestionAnswerLibrary.Library;
 import com.genslerj.QuestionAnswerLibrary.QuestionAnswerPair;
+import com.genslerj.SemanticAttachment.*;
 import edu.stanford.nlp.dcoref.CorefChain;
 import edu.stanford.nlp.dcoref.CorefCoreAnnotations.CorefChainAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.*;
@@ -11,22 +12,16 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation;
 import edu.stanford.nlp.util.CoreMap;
+import net.sf.extjwnl.data.Exc;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
-import java.io.*;
-import java.util.Scanner;
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 
 public class StanfordNLPExample {
 
@@ -236,64 +231,67 @@ public class StanfordNLPExample {
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, Exception {
         //Run by TA via: java -jar <filename>.jar input.txt
 
-        for(QuestionAnswerPair p : Library.questions) {
-            System.out.println(new StanfordNLPExample().parse(p.getQuestion()));
-            System.out.println(new StanfordNLPExample().ner(p.getQuestion()));
-            System.out.println(new StanfordNLPExample().posTagging(p.getQuestion()));
-        }
+        QuestionAnswerPair p = Library.questions[Library.questions.length - 1];
+        System.out.println(new StanfordNLPExample().parse(p.getQuestion()));
+
+//        for(QuestionAnswerPair p : Library.questions) {
+//            System.out.println(new StanfordNLPExample().parse(p.getQuestion()));
+//            System.out.println(new StanfordNLPExample().ner(p.getQuestion()));
+//            System.out.println(new StanfordNLPExample().posTagging(p.getQuestion()));
+//        }
 
         // File reader taken from: [STACKOVERFLOW LINK]
-        String inputFile;
-        String inputLine;
-        BufferedReader br = new BufferedReader(new FileReader("src/main/resources/input.txt"));
-        //BufferedReader br = new BufferedReader(new FileReader(args[3]));
-        try {
-            StringBuilder sb = new StringBuilder();
-            inputLine = br.readLine();
-
-            while (inputLine != null) {
-                sb.append(inputLine);
-                sb.append(System.lineSeparator());
-                inputLine = br.readLine();
-            }
-
-            inputFile = sb.toString();
-        }
-        finally {
-            br.close();
-        }
-
-        // Quick check of file contents
-        //System.out.println(inputFile);
-
-        // Spit out a single line (question) from the file
-        int questionNo = 0; String text;
-        String[] lines = inputFile.split("\n");
-        for (String s : lines) {
-            text = s;
-            questionNo++;
-            // Quick check line-by-line
-            System.out.println("<QUESTION> " + questionNo + ": " + text);
-            //}
-            
-            //String text =
-            //        "Which album by Swift was released in 2014?";
-
-            List<Tree> trees = parse(text);
-            for (Tree tree : trees) {
-                System.out.println("<PARSETREE>\n" + tree);
-            }
-            System.out.println("=====================================================");
-
-            text =
-                    "Victoria Chen, Chief Financial Officer of Megabucks Banking Corp since 2004, saw her pay jump 20%, to $1.3 million, as the 37-year-old also became the Denver-based financial-services company’s president. It has been ten years since she came to Megabucks from rival Lotsabucks.";
-            Map<Integer, CorefChain> graph = coreferenceResolution(text);
-            //for (Entry<Integer, CorefChain> entry : graph.entrySet()) {
-            //    System.out.println(entry);
-            //}
-        }
+//        String inputFile;
+//        String inputLine;
+//        BufferedReader br = new BufferedReader(new FileReader("src/main/resources/input.txt"));
+//        //BufferedReader br = new BufferedReader(new FileReader(args[3]));
+//        try {
+//            StringBuilder sb = new StringBuilder();
+//            inputLine = br.readLine();
+//
+//            while (inputLine != null) {
+//                sb.append(inputLine);
+//                sb.append(System.lineSeparator());
+//                inputLine = br.readLine();
+//            }
+//
+//            inputFile = sb.toString();
+//        }
+//        finally {
+//            br.close();
+//        }
+//
+//        // Quick check of file contents
+//        //System.out.println(inputFile);
+//
+//        // Spit out a single line (question) from the file
+//        int questionNo = 0; String text;
+//        String[] lines = inputFile.split("\n");
+//        for (String s : lines) {
+//            text = s;
+//            questionNo++;
+//            // Quick check line-by-line
+//            System.out.println("<QUESTION> " + questionNo + ": " + text);
+//            //}
+//
+//            //String text =
+//            //        "Which album by Swift was released in 2014?";
+//
+//            List<Tree> trees = parse(text);
+//            for (Tree tree : trees) {
+//                System.out.println("<PARSETREE>\n" + tree);
+//            }
+//            System.out.println("=====================================================");
+//
+//            text =
+//                    "Victoria Chen, Chief Financial Officer of Megabucks Banking Corp since 2004, saw her pay jump 20%, to $1.3 million, as the 37-year-old also became the Denver-based financial-services company’s president. It has been ten years since she came to Megabucks from rival Lotsabucks.";
+//            Map<Integer, CorefChain> graph = coreferenceResolution(text);
+//            //for (Entry<Integer, CorefChain> entry : graph.entrySet()) {
+//            //    System.out.println(entry);
+//            //}
+//        }
     }
 }

@@ -38,5 +38,6 @@ public class Library {
             new QuestionAnswerPair("Which album by Swift was released in 2014?",    ANSWER_UNKNOWN,     Categories.MUSIC),
             // Custom Questions
             new QuestionAnswerPair("Daniel Craig",                ANSWER_UNKNOWN,     Categories.MOVIES),
+            new QuestionAnswerPair("Kubrik directed Hugo?",                     ANSWER_YES,         Categories.MOVIES),
     };
 }

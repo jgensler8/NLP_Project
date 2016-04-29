@@ -16,4 +16,5 @@ public class DatabaseResources {
 
     // This is used inside SQLite to "reflect" on the database (and get columns, tables, etc)
     public static String DATABASE_NAME = "main";
+
 }

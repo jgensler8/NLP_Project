@@ -12,7 +12,7 @@ public class MainTest {
     @Test
     public void testSupplyingTooFewArgumentsThrowsExceptionContainingError() {
         try {
-            Main.main(new String[]{""});
+            Main.main(new String[]{});
         } catch (Exception e) {
             assert(true);
         }
