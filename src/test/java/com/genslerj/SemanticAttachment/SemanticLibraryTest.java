@@ -4,6 +4,7 @@ import com.genslerj.DatabaseTermExtractor.DatabaseQueryAnswerer;
 import com.genslerj.DatabaseTermExtractor.DatabaseResources;
 import edu.stanford.nlp.trees.Tree;
 import main.StanfordNLPExample;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.SQLException;
@@ -13,13 +14,34 @@ import java.sql.SQLException;
  */
 public class SemanticLibraryTest {
 
+    DatabaseQueryAnswerer moviesDatabaseQueryAnswerer;
+
+    @Before
+    public void before_all() throws SQLException, ClassNotFoundException {
+        moviesDatabaseQueryAnswerer = new DatabaseQueryAnswerer(DatabaseResources.MOVIES_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, "movies");
+    }
+
     @Test
-    public void testDirectedQuery() throws SQLException, ClassNotFoundException {
-        Tree kubrikTree = StanfordNLPExample.parse("Kubrik directed Hugo?").get(0);
-        SemanticObject kubrik_semantic_object = ParseTreeToSemanticObject.parse(kubrikTree);
-        DatabaseQueryAnswerer l = new DatabaseQueryAnswerer(DatabaseResources.MOVIES_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, "movies");
-        boolean result = l.runExistsQuery(kubrik_semantic_object.getSemanticText());
-        System.out.println(result);
-        assert(false);
+    public void testKubrikDirectingSpartacusShouldBeTrue() throws SQLException, ClassNotFoundException {
+        Tree kubrikTree = StanfordNLPExample.parse("Kubrick directed Spartacus?").get(0);
+        SemanticObject kubrick_spartacus = ParseTreeToSemanticObject.parse(kubrikTree);
+        boolean result = moviesDatabaseQueryAnswerer.runExistsQuery(kubrick_spartacus.getSemanticText());
+        assert(result == true);
+    }
+
+    @Test
+    public void testKubrickDirectingNemoShouldBeFalse() throws SQLException, ClassNotFoundException {
+        Tree kubrikTree = StanfordNLPExample.parse("Kubrick directed Nemo?").get(0);
+        SemanticObject kubrik_nemo = ParseTreeToSemanticObject.parse(kubrikTree);
+        boolean result = moviesDatabaseQueryAnswerer.runExistsQuery(kubrik_nemo.getSemanticText());
+        assert(result == false);
+    }
+
+    @Test
+    public void testStantonDirectingNemoShouldBeTrue() throws SQLException, ClassNotFoundException {
+        Tree kubrikTree = StanfordNLPExample.parse("Stanton directed Nemo?").get(0);
+        SemanticObject stanton_nemo = ParseTreeToSemanticObject.parse(kubrikTree);
+        boolean result = moviesDatabaseQueryAnswerer.runExistsQuery(stanton_nemo.getSemanticText());
+        assert(result == true);
     }
 }
