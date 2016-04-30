@@ -38,7 +38,7 @@ public class NPSemanticObject extends SemanticObject {
     public static Function<DTSemanticObject, Function<NNSemanticObject, NPSemanticObject>> npSemanticObjectSemanticFunction2 =
             (DTSemanticObject dtSemanticObject) ->
                     (NNSemanticObject nnSemanticObject) ->
-                                    new NPSemanticObject(String.format("%s", nnSemanticObject.semanticText));
+                                    new NPSemanticObject(String.format("SELECT q.name FROM Person AS q WHERE q.name LIKE '%%%s%%'", nnSemanticObject.semanticText));
     // Determiner + Proper Noun
     public static Function<DTSemanticObject, Function<NNPSemanticObject, NPSemanticObject>> npSemanticObjectSemanticFunction3 =
             (DTSemanticObject dtSemanticObject) ->

@@ -16,8 +16,13 @@ public class RootSemanticObject extends SemanticObject {
 
     @Override
     public Function getCreationFunction(Tree t, List<SemanticObject> children_semantic_objects) {
-        return rootSemanticFunction1;
+        if(children_semantic_objects.get(0).getClass().equals(SSemanticObject.class))
+            return rootSemanticFunction1;
+        else
+            return rootSemanticFunction2;
     }
 
     public static Function<SSemanticObject, RootSemanticObject> rootSemanticFunction1 = (SSemanticObject sSemanticObject) -> new RootSemanticObject(sSemanticObject.semanticText);
+    public static Function<SQSemanticObject, RootSemanticObject> rootSemanticFunction2 = (SQSemanticObject sqSemanticObject) -> new RootSemanticObject(sqSemanticObject.semanticText);
+
 }

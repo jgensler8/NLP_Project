@@ -29,8 +29,8 @@ public class ParseTreeToSemanticObject {
         // get the correct semantic function
         Function currentSemanticFunction;
         if(t.numChildren() == 0) {
-            if(semanticLibrary.actualizedWordToSemanticFunction.containsKey(t.value())) {
-                return new ActualizedSemanticObject(semanticLibrary.actualizedWordToSemanticFunction.get(t.value()));
+            if(semanticLibrary.actualizedWordToSemanticFunction.containsKey(t.value().toLowerCase())) {
+                return new ActualizedSemanticObject(semanticLibrary.actualizedWordToSemanticFunction.get(t.value().toLowerCase()));
             }
             else {
                 return new ActualizedSemanticObject(t.value());

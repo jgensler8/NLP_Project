@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.util.function.Function;
 
 /**
  * Created by genslerj on 4/29/16.
@@ -67,4 +68,10 @@ public class SemanticLibraryTest {
         }
         assert(false);
     }
+
+//    @Test
+//    public void testIsShouldReturnFunction() {
+//        SemanticLibrary l = new SemanticLibrary();
+//        assert(l.actualizedWordToSemanticFunction.get("is").getClass().getSuperclass().equals(Function.class));
+//    }
 }

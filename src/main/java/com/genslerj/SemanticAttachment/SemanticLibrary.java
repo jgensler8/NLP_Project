@@ -30,11 +30,13 @@ public class SemanticLibrary {
                             SELECT * FROM Director
                          */
 
-                        // is is also used with determiners which will resolve to subqueries
+                        // I need to create the query based on the Noun phrases
+                        // noun phrases with determiners will have sub-queries ( IN (SELECT * FROM ASDF) )
+                        // noun phrases with proper nouns will be entities ( LIKE "%%ASDF%%" )
                         return new VBZSemanticObject(
-                                String.format("SELECT * FROM Person WHERE name LIKE '%%%s%%' AND name IN (%%%s%%)",
-                                        recipient.getSemanticText(),
-                                        agent.getSemanticText()));
+                                String.format("SELECT * FROM Person WHERE name LIKE '%%%s%%' AND name IN (%s)",
+                                        recipient.semanticText,
+                                        agent.semanticText));
                     };
 
     public Map<String,Function> actualizedWordToSemanticFunction;
@@ -49,6 +51,7 @@ public class SemanticLibrary {
         this.treebankTagToSemanticObject.put(NNPSemanticObject.treebankTag, new NNPSemanticObject(""));
         this.treebankTagToSemanticObject.put(NNSemanticObject.treebankTag, new NNSemanticObject(""));
         this.treebankTagToSemanticObject.put(NPSemanticObject.treebankTag, new NPSemanticObject(""));
+        this.treebankTagToSemanticObject.put(SQSemanticObject.treebankTag, new SQSemanticObject(""));
         this.treebankTagToSemanticObject.put(SSemanticObject.treebankTag, new SSemanticObject(""));
         this.treebankTagToSemanticObject.put(VBDSemanticObject.treebankTag, new VBDSemanticObject(""));
         this.treebankTagToSemanticObject.put(VBZSemanticObject.treebankTag, new VBZSemanticObject(""));
