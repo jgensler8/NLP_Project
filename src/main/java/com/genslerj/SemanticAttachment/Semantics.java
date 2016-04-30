@@ -1,7 +1,5 @@
 package com.genslerj.SemanticAttachment;
 
-import com.sun.tools.hat.internal.model.Root;
-
 import java.util.function.Function;
 
 /**

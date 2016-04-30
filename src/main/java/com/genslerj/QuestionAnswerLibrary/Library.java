@@ -4,12 +4,14 @@ package com.genslerj.QuestionAnswerLibrary;
  * Created by genslerj on 4/3/16.
  */
 public class Library {
-    public static String ANSWER_YES = "Yes";
-    public static String ANSWER_NO = "No";
+    public static String ANSWER_YES = "true";
+    public static String ANSWER_NO = "false";
     public static String ANSWER_UNKNOWN = "Unknown";
 
     public static QuestionAnswerPair questions[] = {
             // Yes/No Questions
+            new QuestionAnswerPair("Is Rome the capital?",                          ANSWER_YES,         Categories.GEOGRAPHY),
+
             new QuestionAnswerPair("Is Rome the capital of Italy?",                 ANSWER_YES,         Categories.GEOGRAPHY),
             new QuestionAnswerPair("Is France in Europe?",                          ANSWER_YES,         Categories.GEOGRAPHY),
             new QuestionAnswerPair("Is the Pacific deeper than the Atlantic?",      ANSWER_UNKNOWN,     Categories.GEOGRAPHY),
@@ -37,7 +39,7 @@ public class Library {
             new QuestionAnswerPair("In which album does Aura appear?",              ANSWER_UNKNOWN,     Categories.MUSIC),
             new QuestionAnswerPair("Which album by Swift was released in 2014?",    ANSWER_UNKNOWN,     Categories.MUSIC),
             // Custom Questions
-            new QuestionAnswerPair("Daniel Craig",                ANSWER_UNKNOWN,     Categories.MOVIES),
-            new QuestionAnswerPair("Kubrik directed Hugo?",                     ANSWER_YES,         Categories.MOVIES),
+            new QuestionAnswerPair("Daniel Craig",                                  ANSWER_UNKNOWN,     Categories.MOVIES),
+            new QuestionAnswerPair("Kubrick directed Nemo?",                        ANSWER_YES,         Categories.MOVIES),
     };
 }

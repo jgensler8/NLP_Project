@@ -2,6 +2,8 @@ package com.genslerj.SemanticAttachment;
 
 import com.genslerj.DatabaseTermExtractor.DatabaseQueryAnswerer;
 import com.genslerj.DatabaseTermExtractor.DatabaseResources;
+import com.genslerj.QuestionAnswerLibrary.Library;
+import com.genslerj.QuestionAnswerLibrary.QuestionAnswerPair;
 import edu.stanford.nlp.trees.Tree;
 import main.StanfordNLPExample;
 import org.junit.Before;
@@ -22,7 +24,7 @@ public class SemanticLibraryTest {
     }
 
     @Test
-    public void testKubrikDirectingSpartacusShouldBeTrue() throws SQLException, ClassNotFoundException {
+    public void testKubrikDirectingSpartacusShouldBeTrue() throws SQLException, ClassNotFoundException, TreebankTagNotSupportedException {
         Tree kubrikTree = StanfordNLPExample.parse("Kubrick directed Spartacus?").get(0);
         SemanticObject kubrick_spartacus = ParseTreeToSemanticObject.parse(kubrikTree);
         boolean result = moviesDatabaseQueryAnswerer.runExistsQuery(kubrick_spartacus.getSemanticText());
@@ -30,7 +32,7 @@ public class SemanticLibraryTest {
     }
 
     @Test
-    public void testKubrickDirectingNemoShouldBeFalse() throws SQLException, ClassNotFoundException {
+    public void testKubrickDirectingNemoShouldBeFalse() throws SQLException, ClassNotFoundException, TreebankTagNotSupportedException {
         Tree kubrikTree = StanfordNLPExample.parse("Kubrick directed Nemo?").get(0);
         SemanticObject kubrik_nemo = ParseTreeToSemanticObject.parse(kubrikTree);
         boolean result = moviesDatabaseQueryAnswerer.runExistsQuery(kubrik_nemo.getSemanticText());
@@ -38,10 +40,31 @@ public class SemanticLibraryTest {
     }
 
     @Test
-    public void testStantonDirectingNemoShouldBeTrue() throws SQLException, ClassNotFoundException {
+    public void testStantonDirectingNemoShouldBeTrue() throws SQLException, ClassNotFoundException, TreebankTagNotSupportedException {
         Tree kubrikTree = StanfordNLPExample.parse("Stanton directed Nemo?").get(0);
         SemanticObject stanton_nemo = ParseTreeToSemanticObject.parse(kubrikTree);
         boolean result = moviesDatabaseQueryAnswerer.runExistsQuery(stanton_nemo.getSemanticText());
         assert(result == true);
+    }
+
+    @Test
+    public void testAllActualLibraryQuestions() throws SQLException, ClassNotFoundException {
+        for(QuestionAnswerPair pair : Library.questions) {
+            Tree tree = StanfordNLPExample.parse(pair.getQuestion()).get(0);
+            SemanticObject object = null;
+            System.out.println(String.format("About to parse: %s", pair.getQuestion()));
+            try {
+                object = ParseTreeToSemanticObject.parse(tree);
+            } catch (TreebankTagNotSupportedException c) {
+                System.out.println(c.getMessage());
+                continue;
+            }
+            boolean result = moviesDatabaseQueryAnswerer.runExistsQuery(object.getSemanticText());
+
+            if(! String.valueOf(result).equals(pair.getAnswer())) {
+                System.out.println(String.format("Answered: %s wrong", pair.getQuestion()));
+            }
+        }
+        assert(false);
     }
 }

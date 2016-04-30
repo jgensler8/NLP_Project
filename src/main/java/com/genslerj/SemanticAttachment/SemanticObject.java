@@ -1,5 +1,8 @@
 package com.genslerj.SemanticAttachment;
 
+import edu.stanford.nlp.trees.Tree;
+
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -14,4 +17,5 @@ abstract public class SemanticObject {
     public SemanticObject(Function semanticFunction) { this.semanticFunction = semanticFunction; }
 
     public String getSemanticText() { return this.semanticText; }
+    abstract public Function getCreationFunction(Tree t, List<SemanticObject> children_semantic_objects);
 }

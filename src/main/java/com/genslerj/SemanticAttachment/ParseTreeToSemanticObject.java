@@ -10,27 +10,16 @@ import java.util.function.Function;
  */
 public class ParseTreeToSemanticObject {
 
-    private static Function getSemanticFunction(Tree t, ArrayList<SemanticObject> children_semantic_objects) {
-        switch(t.value()) {
-            case "NNP":
-                return NNPSemanticObject.nnpSemanticObjectSemanticFunction1;
-            case "NP":
-                return NPSemanticObject.npSemanticObjectSemanticFunction1;
-            case "ROOT":
-                return RootSemanticObject.rootSemanticFunction1;
-            case "S":
-                return SSemanticObject.sSemanticFunction1;
-            case "VBD":
-                return VBDSemanticObject.vbdSemanticObjectSemanticFunction1;
-            case "VP":
-                return VPSemanticObject.vpSemanticObjectSemanticFunction1;
-            default:
-//                    throw new Exception("That part of speech isn't supprted by the semantic resolution subsystem");
-                return null;
+    private static SemanticLibrary semanticLibrary = new SemanticLibrary();
+
+    private static Function getSemanticFunction(Tree t, ArrayList<SemanticObject> children_semantic_objects) throws TreebankTagNotSupportedException {
+        if(semanticLibrary.treebankTagToSemanticObject.containsKey(t.value())) {
+            return semanticLibrary.treebankTagToSemanticObject.get(t.value()).getCreationFunction(t, children_semantic_objects);
         }
+        throw new TreebankTagNotSupportedException(String.format("Penn Treebank Tag '%s' is not supported by the SemanticObject conversion subsystem", t.value()));
     }
 
-    private static SemanticObject parse_helper(Tree t) {
+    private static SemanticObject parse_helper(Tree t) throws TreebankTagNotSupportedException {
         // gather the children's semantic objects
         ArrayList<SemanticObject> children_semantic_objects = new ArrayList<>(t.children().length);
         for(Tree child : t.children()) {
@@ -40,8 +29,8 @@ public class ParseTreeToSemanticObject {
         // get the correct semantic function
         Function currentSemanticFunction;
         if(t.numChildren() == 0) {
-            if(t.value().equals("directed")) {
-                return new ActualizedSemanticObject(SemanticLibrary.directed);
+            if(semanticLibrary.actualizedWordToSemanticFunction.containsKey(t.value())) {
+                return new ActualizedSemanticObject(semanticLibrary.actualizedWordToSemanticFunction.get(t.value()));
             }
             else {
                 return new ActualizedSemanticObject(t.value());
@@ -69,7 +58,7 @@ public class ParseTreeToSemanticObject {
         }
     }
 
-    public static SemanticObject parse(Tree t) {
+    public static SemanticObject parse(Tree t) throws TreebankTagNotSupportedException {
         return parse_helper(t);
     }
 }
