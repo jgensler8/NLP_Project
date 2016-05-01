@@ -13,6 +13,7 @@ public class Library {
             new QuestionAnswerPair("Is Rome the capital?",                          ANSWER_YES,         Categories.GEOGRAPHY),
 
             new QuestionAnswerPair("Is Rome the capital of Italy?",                 ANSWER_YES,         Categories.GEOGRAPHY),
+            new QuestionAnswerPair("France is in Europe?",                          ANSWER_YES,         Categories.GEOGRAPHY),
             new QuestionAnswerPair("Is France in Europe?",                          ANSWER_YES,         Categories.GEOGRAPHY),
             new QuestionAnswerPair("Is the Pacific deeper than the Atlantic?",      ANSWER_UNKNOWN,     Categories.GEOGRAPHY),
             new QuestionAnswerPair("Did Neeson star in Shindler's List?",           ANSWER_UNKNOWN,     Categories.MOVIES),

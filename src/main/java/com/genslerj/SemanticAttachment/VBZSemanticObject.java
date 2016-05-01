@@ -22,5 +22,5 @@ public class VBZSemanticObject extends SemanticObject {
     }
 
     public static Function<ActualizedSemanticObject, VBZSemanticObject> vbzSemanticObjectSemanticFunction1 =
-            (ActualizedSemanticObject actualizedSemanticObject) -> new VBZSemanticObject(actualizedSemanticObject.semanticFunction);
+            (ActualizedSemanticObject actualizedSemanticObject) -> new VBZSemanticObject(actualizedSemanticObject.semanticFunction );
 }

@@ -22,7 +22,12 @@ public class NPSemanticObject extends SemanticObject {
                 else
                     return NPSemanticObject.npSemanticObjectSemanticFunction3;
             }
-            else return NPSemanticObject.npSemanticObjectSemanticFunction4;
+            else if (children_semantic_objects.get(1).getClass().equals(NNSemanticObject.class))
+                return NPSemanticObject.npSemanticObjectSemanticFunction4;
+            else if (children_semantic_objects.get(1).getClass().equals(JJSemanticObject.class))
+                return NPSemanticObject.npSemanticObjectSemanticFunction9;
+            else
+                return NPSemanticObject.npSemanticObjectSemanticFunction10;
         }
         else if(children_semantic_objects.get(0).getClass().equals(NNPSemanticObject.class)) {
             return NPSemanticObject.npSemanticObjectSemanticFunction1;
@@ -30,9 +35,17 @@ public class NPSemanticObject extends SemanticObject {
         else if(children_semantic_objects.get(0).getClass().equals(NPSemanticObject.class)){
             return NPSemanticObject.npSemanticObjectSemanticFunction5;
         }
-        else {
+        else if(children_semantic_objects.get(0).getClass().equals(JJSSemanticObject.class)){
             return NPSemanticObject.npSemanticObjectSemanticFunction6;
         }
+        else if(children_semantic_objects.get(0).getClass().equals(JJRSemanticObject.class)){
+            return NPSemanticObject.npSemanticObjectSemanticFunction7;
+        }
+        else if(children_semantic_objects.get(0).getClass().equals(CDSemanticObject.class)){
+            return npSemanticObjectSemanticFunction8;
+        }
+        else
+            return npSemanticObjectSemanticFunction11;
     }
 
     // Proper Noun
@@ -57,6 +70,20 @@ public class NPSemanticObject extends SemanticObject {
                     (NNSemanticObject nnSemanticObject1) ->
                             (NNSemanticObject nnSemanticObject2) ->
                                     new NPSemanticObject(String.format("%s", nnSemanticObject2.semanticText));
+    // Determiner + Adjective + Common Noun
+    public static Function<DTSemanticObject, Function<JJSemanticObject, Function<NNSemanticObject, NPSemanticObject>>> npSemanticObjectSemanticFunction9 =
+            (DTSemanticObject dtSemanticObject) ->
+                    (JJSemanticObject jjSemanticObject) ->
+                            (NNSemanticObject nnSemanticObject2) ->
+                                    new NPSemanticObject(String.format("%s", nnSemanticObject2.semanticText));
+    // Determiner + Adjective (Superlative) + Common Noun
+    public static Function<DTSemanticObject, Function<JJSSemanticObject, Function<NNSemanticObject, NPSemanticObject>>> npSemanticObjectSemanticFunction10 =
+            (DTSemanticObject dtSemanticObject) ->
+                    (JJSSemanticObject jjSemanticObject) ->
+                            (NNSemanticObject nnSemanticObject2) ->
+                                    new NPSemanticObject(String.format("%s", nnSemanticObject2.semanticText));
+
+
 
     // Noun Phrase + Prepositional Phrase
     // TODO: might have to figure out some sort of SQL
@@ -71,4 +98,19 @@ public class NPSemanticObject extends SemanticObject {
             (JJSSemanticObject jjsSemanticObject) ->
                     (NNSemanticObject nnSemanticObject) ->
                             new NPSemanticObject(String.format("%s", nnSemanticObject.semanticText));
+
+    // Adjective (Comparative)
+    public static Function<JJRSemanticObject, NPSemanticObject> npSemanticObjectSemanticFunction7 =
+            (JJRSemanticObject jjrSemanticObject) ->
+                    new NPSemanticObject(jjrSemanticObject.semanticText);
+
+    // Cardinal Number
+    public static Function <CDSemanticObject, NPSemanticObject> npSemanticObjectSemanticFunction8 =
+            (CDSemanticObject cdSemanticObject) ->
+                    new NPSemanticObject(cdSemanticObject.semanticText);
+
+    // Common Noun
+    public static Function <NNSemanticObject, NPSemanticObject> npSemanticObjectSemanticFunction11 =
+            (NNSemanticObject cdSemanticObject) ->
+                    new NPSemanticObject(cdSemanticObject.semanticText);
 }

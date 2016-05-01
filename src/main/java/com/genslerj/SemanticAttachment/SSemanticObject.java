@@ -18,12 +18,20 @@ public class SSemanticObject extends SemanticObject {
 
     @Override
     public Function getCreationFunction(Tree t, List<SemanticObject> children_semantic_objects) {
-        return sSemanticFunction1;
+        if(children_semantic_objects.get(0).getClass().equals(NPSemanticObject.class))
+            return sSemanticFunction1;
+        else
+            return sSemanticFunction2;
     }
 
-    public static Function<NPSemanticObject, Function<VPSemanticObject, SSemanticObject>> sSemanticFunction1 = (NPSemanticObject npSemanticObject) -> (VPSemanticObject vpSemanticObject) -> {
-        SemanticObject intermediateSemanticObject = (SemanticObject) vpSemanticObject.semanticFunction.apply(npSemanticObject);
-        return new SSemanticObject(intermediateSemanticObject.semanticQuery);
-    };
+    public static Function<NPSemanticObject, Function<VPSemanticObject, SSemanticObject>> sSemanticFunction1 =
+            (NPSemanticObject npSemanticObject) ->
+                    (VPSemanticObject vpSemanticObject) -> {
+                        SemanticObject intermediateSemanticObject = (SemanticObject) vpSemanticObject.semanticFunction.apply(npSemanticObject);
+                        return new SSemanticObject(intermediateSemanticObject.semanticQuery);
+                    };
 
+    public static Function<VPSemanticObject, SSemanticObject> sSemanticFunction2 =
+            (VPSemanticObject vpSemanticObject) ->
+                    new SSemanticObject(vpSemanticObject.semanticQuery);
 }

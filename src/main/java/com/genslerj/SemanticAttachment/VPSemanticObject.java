@@ -1,5 +1,6 @@
 package com.genslerj.SemanticAttachment;
 
+import com.healthmarketscience.sqlbuilder.SelectQuery;
 import edu.stanford.nlp.trees.Tree;
 
 import java.util.List;
@@ -13,12 +14,27 @@ public class VPSemanticObject extends SemanticObject {
 
     public VPSemanticObject(String semanticText){ super(semanticText); }
     public VPSemanticObject(Function semanticFunction){ super(semanticFunction); }
+    public VPSemanticObject(SelectQuery semanticQuery){ super(semanticQuery); }
 
     @Override
     public Function getCreationFunction(Tree t, List<SemanticObject> children_semantic_objects) {
-        if(children_semantic_objects.size() == 2) return vpSemanticObjectSemanticFunction1;
-        else if (children_semantic_objects.size() == 3) return vpSemanticObjectSemanticFunction2;
-        else return vpSemanticObjectSemanticFunction3;
+        if(children_semantic_objects.get(0).getClass().equals(VBDSemanticObject.class)) {
+            if(children_semantic_objects.size() == 2) return vpSemanticObjectSemanticFunction1;
+            else if (children_semantic_objects.size() == 3) return vpSemanticObjectSemanticFunction2;
+            else return vpSemanticObjectSemanticFunction3;
+        }
+        else if(children_semantic_objects.get(0).getClass().equals(VBZSemanticObject.class)) {
+            if(children_semantic_objects.get(1).getClass().equals(SBARSemanticObject.class))
+                return vpSemanticObjectSemanticFunction7;
+            else if (children_semantic_objects.get(1).getClass().equals(PPSemanticObject.class))
+                return vpSemanticObjectSemanticFunction4;
+            else
+                return vpSemanticObjectSemanticFunction8;
+        }
+        else if(children_semantic_objects.get(0).getClass().equals(VBSemanticObject.class)){
+            return vpSemanticObjectSemanticFunction5;
+        }
+        else return vpSemanticObjectSemanticFunction6;
     }
 
     public static Function<VBDSemanticObject, Function<NPSemanticObject, VPSemanticObject>> vpSemanticObjectSemanticFunction1 =
@@ -47,4 +63,35 @@ public class VPSemanticObject extends SemanticObject {
                                         vp.semanticFunction = (Function) vp.semanticFunction.apply(npSemanticObject);
                                         return vp;
                                     };
+
+    public static Function<VBZSemanticObject, Function<PPSemanticObject, VPSemanticObject>> vpSemanticObjectSemanticFunction4 =
+            (VBZSemanticObject vbzSemanticObject) ->
+                    (PPSemanticObject ppSemanticObject) ->
+                        new VPSemanticObject((Function) vbzSemanticObject.semanticFunction.apply(ppSemanticObject));
+
+    public static Function<VBZSemanticObject, Function<NPSemanticObject, VPSemanticObject>> vpSemanticObjectSemanticFunction8 =
+            (VBZSemanticObject vbzSemanticObject) ->
+                    (NPSemanticObject npSemanticObject) ->
+                        new VPSemanticObject((Function) vbzSemanticObject.semanticFunction.apply(npSemanticObject));
+
+    public static Function<VBZSemanticObject, Function<SBARSemanticObject, VPSemanticObject>> vpSemanticObjectSemanticFunction7 =
+            (VBZSemanticObject vbzSemanticObject) ->
+                    (SBARSemanticObject sbarSemanticObject) ->
+                        new VPSemanticObject(sbarSemanticObject.semanticQuery);
+
+    public static Function<VBSemanticObject, Function<NPSemanticObject, VPSemanticObject>> vpSemanticObjectSemanticFunction5 =
+            (VBSemanticObject vbSemanticObject) ->
+                    (NPSemanticObject npSemanticObject) -> {
+                        VPSemanticObject vp = new VPSemanticObject(vbSemanticObject.semanticFunction);
+                        vp.semanticFunction = (Function) vp.semanticFunction.apply(npSemanticObject);
+                        return vp;
+                    };
+
+    public static Function<VBPSemanticObject, Function<NPSemanticObject, VPSemanticObject>> vpSemanticObjectSemanticFunction6 =
+            (VBPSemanticObject vbpSemanticObject) ->
+                    (NPSemanticObject npSemanticObject) -> {
+                        VPSemanticObject vp = new VPSemanticObject(vbpSemanticObject.semanticFunction);
+                        vp.semanticFunction = (Function) vp.semanticFunction.apply(npSemanticObject);
+                        return vp;
+                    };
 }
