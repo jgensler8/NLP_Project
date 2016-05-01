@@ -59,6 +59,7 @@ public class ParseTreeToSemanticObject {
     }
 
     public static SemanticObject parse(Tree t) throws TreebankTagNotSupportedException {
+//        System.out.println(t.pennString());
         return parse_helper(t);
     }
 }

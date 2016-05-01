@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.SQLException;
-import java.util.function.Function;
 
 /**
  * Created by genslerj on 4/29/16.
@@ -28,7 +27,7 @@ public class SemanticLibraryTest {
     public void testKubrikDirectingSpartacusShouldBeTrue() throws SQLException, ClassNotFoundException, TreebankTagNotSupportedException {
         Tree kubrikTree = StanfordNLPExample.parse("Kubrick directed Spartacus?").get(0);
         SemanticObject kubrick_spartacus = ParseTreeToSemanticObject.parse(kubrikTree);
-        boolean result = moviesDatabaseQueryAnswerer.runExistsQuery(kubrick_spartacus.getSemanticText());
+        boolean result = moviesDatabaseQueryAnswerer.runExistsQuery(kubrick_spartacus.getSemanticQuery());
         assert(result == true);
     }
 
@@ -36,7 +35,7 @@ public class SemanticLibraryTest {
     public void testKubrickDirectingNemoShouldBeFalse() throws SQLException, ClassNotFoundException, TreebankTagNotSupportedException {
         Tree kubrikTree = StanfordNLPExample.parse("Kubrick directed Nemo?").get(0);
         SemanticObject kubrik_nemo = ParseTreeToSemanticObject.parse(kubrikTree);
-        boolean result = moviesDatabaseQueryAnswerer.runExistsQuery(kubrik_nemo.getSemanticText());
+        boolean result = moviesDatabaseQueryAnswerer.runExistsQuery(kubrik_nemo.getSemanticQuery());
         assert(result == false);
     }
 
@@ -44,7 +43,7 @@ public class SemanticLibraryTest {
     public void testStantonDirectingNemoShouldBeTrue() throws SQLException, ClassNotFoundException, TreebankTagNotSupportedException {
         Tree kubrikTree = StanfordNLPExample.parse("Stanton directed Nemo?").get(0);
         SemanticObject stanton_nemo = ParseTreeToSemanticObject.parse(kubrikTree);
-        boolean result = moviesDatabaseQueryAnswerer.runExistsQuery(stanton_nemo.getSemanticText());
+        boolean result = moviesDatabaseQueryAnswerer.runExistsQuery(stanton_nemo.getSemanticQuery());
         assert(result == true);
     }
 
@@ -60,7 +59,7 @@ public class SemanticLibraryTest {
                 System.out.println(c.getMessage());
                 continue;
             }
-            boolean result = moviesDatabaseQueryAnswerer.runExistsQuery(object.getSemanticText());
+            boolean result = moviesDatabaseQueryAnswerer.runExistsQuery(object.getSemanticQuery());
 
             if(! String.valueOf(result).equals(pair.getAnswer())) {
                 System.out.println(String.format("Answered: %s wrong", pair.getQuestion()));

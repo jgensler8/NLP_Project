@@ -19,18 +19,18 @@ public class ParseTreeToSemanticObjectTest {
     @Test
     public void testKubrikTestContainsKubrik() throws TreebankTagNotSupportedException {
         SemanticObject kubrik_semantic_object = ParseTreeToSemanticObject.parse(kubrikTree);
-        assert(kubrik_semantic_object.getSemanticText().contains("Kubrik"));
+        assert(kubrik_semantic_object.getSemanticQuery().toString().contains("Kubrik"));
     }
 
     @Test
     public void testKubrikTestContainsHugo() throws TreebankTagNotSupportedException {
         SemanticObject kubrik_semantic_object = ParseTreeToSemanticObject.parse(kubrikTree);
-        assert(kubrik_semantic_object.getSemanticText().contains("Hugo"));
+        assert(kubrik_semantic_object.getSemanticQuery().toString().contains("Hugo"));
     }
 
     @Test
     public void testKubrikTestContainsSELECT() throws TreebankTagNotSupportedException {
         SemanticObject kubrik_semantic_object = ParseTreeToSemanticObject.parse(kubrikTree);
-        assert(kubrik_semantic_object.getSemanticText().contains("SELECT"));
+        assert(kubrik_semantic_object.getSemanticQuery().toString().contains("SELECT"));
     }
 }

@@ -24,8 +24,14 @@ public class NPSemanticObject extends SemanticObject {
             }
             else return NPSemanticObject.npSemanticObjectSemanticFunction4;
         }
-        else {
+        else if(children_semantic_objects.get(0).getClass().equals(NNPSemanticObject.class)) {
             return NPSemanticObject.npSemanticObjectSemanticFunction1;
+        }
+        else if(children_semantic_objects.get(0).getClass().equals(NPSemanticObject.class)){
+            return NPSemanticObject.npSemanticObjectSemanticFunction5;
+        }
+        else {
+            return NPSemanticObject.npSemanticObjectSemanticFunction6;
         }
     }
 
@@ -38,7 +44,8 @@ public class NPSemanticObject extends SemanticObject {
     public static Function<DTSemanticObject, Function<NNSemanticObject, NPSemanticObject>> npSemanticObjectSemanticFunction2 =
             (DTSemanticObject dtSemanticObject) ->
                     (NNSemanticObject nnSemanticObject) ->
-                                    new NPSemanticObject(String.format("SELECT q.name FROM Person AS q WHERE q.name LIKE '%%%s%%'", nnSemanticObject.semanticText));
+                            new NPSemanticObject(nnSemanticObject.semanticText);
+//                                    new NPSemanticObject(String.format("SELECT q.name FROM Person AS q WHERE q.name LIKE '%%%s%%'", nnSemanticObject.semanticText));
     // Determiner + Proper Noun
     public static Function<DTSemanticObject, Function<NNPSemanticObject, NPSemanticObject>> npSemanticObjectSemanticFunction3 =
             (DTSemanticObject dtSemanticObject) ->
@@ -50,4 +57,18 @@ public class NPSemanticObject extends SemanticObject {
                     (NNSemanticObject nnSemanticObject1) ->
                             (NNSemanticObject nnSemanticObject2) ->
                                     new NPSemanticObject(String.format("%s", nnSemanticObject2.semanticText));
+
+    // Noun Phrase + Prepositional Phrase
+    // TODO: might have to figure out some sort of SQL
+    // TODO: figure out if NounPhrases will always return subqueries or plain text
+    public static Function<NPSemanticObject, Function<PPSemanticObject, NPSemanticObject>> npSemanticObjectSemanticFunction5 =
+            (NPSemanticObject npSemanticObject) ->
+                    (PPSemanticObject ppSemanticObject) ->
+                            new NPSemanticObject(String.format("%s", npSemanticObject.semanticText, ppSemanticObject.semanticText));
+
+    // Adjective (Superlative) + Common Noun (ignores adjective)
+    public static Function<JJSSemanticObject, Function<NNSemanticObject, NPSemanticObject>> npSemanticObjectSemanticFunction6 =
+            (JJSSemanticObject jjsSemanticObject) ->
+                    (NNSemanticObject nnSemanticObject) ->
+                            new NPSemanticObject(String.format("%s", nnSemanticObject.semanticText));
 }

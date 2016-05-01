@@ -1,5 +1,7 @@
 package com.genslerj.DatabaseTermExtractor;
 
+import com.healthmarketscience.sqlbuilder.BinaryCondition;
+import com.healthmarketscience.sqlbuilder.SelectQuery;
 import org.junit.Test;
 
 import java.sql.SQLException;
@@ -12,14 +14,22 @@ public class DatabaseQueryAnswererTest {
     @Test
     public void testBooleanQueryShouldReturnTrueWhenGivenTrueQuery() throws SQLException, ClassNotFoundException {
         DatabaseQueryAnswerer l = new DatabaseQueryAnswerer(DatabaseResources.MOVIES_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, "movies");
-        boolean result = l.runExistsQuery("SELECT * FROM Movie as m WHERE m.name LIKE '%dream%';");
+        SelectQuery selectQuery = new SelectQuery()
+                .addAllColumns()
+                .addFromTable(DatabaseResources.movieTable)
+                .addCondition(BinaryCondition.like(DatabaseResources.movie_name, "%dream%"));
+        boolean result = l.runExistsQuery(selectQuery);
         assert(result == true);
     }
 
     @Test
     public void testBooleanQueryShouldReturnFalseWhenGivenFalseQuery() throws SQLException, ClassNotFoundException {
         DatabaseQueryAnswerer l = new DatabaseQueryAnswerer(DatabaseResources.MOVIES_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, "movies");
-        boolean result = l.runExistsQuery("SELECT * FROM Movie as m WHERE m.name LIKE '%zzzzz%';");
+        SelectQuery selectQuery = new SelectQuery()
+                .addAllColumns()
+                .addFromTable(DatabaseResources.movieTable)
+                .addCondition(BinaryCondition.like(DatabaseResources.movie_name, "%zzzzzzz%"));
+        boolean result = l.runExistsQuery(selectQuery);
         assert(result == false);
     }
 }

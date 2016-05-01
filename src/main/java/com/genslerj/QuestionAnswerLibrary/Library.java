@@ -17,9 +17,11 @@ public class Library {
             new QuestionAnswerPair("Is the Pacific deeper than the Atlantic?",      ANSWER_UNKNOWN,     Categories.GEOGRAPHY),
             new QuestionAnswerPair("Did Neeson star in Shindler's List?",           ANSWER_UNKNOWN,     Categories.MOVIES),
             new QuestionAnswerPair("Did Swank win the oscar in 2000?",              ANSWER_UNKNOWN,     Categories.MOVIES),
-            new QuestionAnswerPair("Is the Shining by Kubrik?",                     ANSWER_YES,         Categories.MOVIES),
+//            new QuestionAnswerPair("The Shining is by Kubrik?",                     ANSWER_YES,         Categories.MOVIES),
+//            new QuestionAnswerPair("Is the Shining by Kubrik?",                     ANSWER_YES,         Categories.MOVIES),
             new QuestionAnswerPair("Did a French actor win the oscar in 2012?",     ANSWER_UNKNOWN, Categories.MOVIES),
-            new QuestionAnswerPair("Did a movie by Spielberg with Neeson win the oscar for best film?",     ANSWER_UNKNOWN,     Categories.MOVIES),
+            new QuestionAnswerPair("A movie by Spielberg with Neeson won the oscar for best film?",         ANSWER_UNKNOWN,     Categories.MOVIES),
+//            new QuestionAnswerPair("Did a movie by Spielberg with Neeson win the oscar for best film?",     ANSWER_UNKNOWN,     Categories.MOVIES),
             new QuestionAnswerPair("Did Madonna sing PapaDoNotPreach?",             ANSWER_UNKNOWN, Categories.MUSIC),
             new QuestionAnswerPair("Does the album Thriller include the track BeatIt?",                     ANSWER_YES,         Categories.MUSIC),
             new QuestionAnswerPair("Was Beyonce' born in the USA?",                 ANSWER_UNKNOWN, Categories.MUSIC),
@@ -39,7 +41,6 @@ public class Library {
             new QuestionAnswerPair("In which album does Aura appear?",              ANSWER_UNKNOWN,     Categories.MUSIC),
             new QuestionAnswerPair("Which album by Swift was released in 2014?",    ANSWER_UNKNOWN,     Categories.MUSIC),
             // Custom Questions
-            new QuestionAnswerPair("Daniel Craig",                                  ANSWER_UNKNOWN,     Categories.MOVIES),
             new QuestionAnswerPair("Kubrick directed Nemo?",                        ANSWER_YES,         Categories.MOVIES),
     };
 }

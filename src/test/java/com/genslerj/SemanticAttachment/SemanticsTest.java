@@ -2,6 +2,8 @@ package com.genslerj.SemanticAttachment;
 
 import org.junit.Test;
 
+import java.sql.SQLException;
+
 import static org.junit.Assert.*;
 
 /**
@@ -9,7 +11,7 @@ import static org.junit.Assert.*;
  */
 public class SemanticsTest {
     @Test
-    public void testDoSomething() {
+    public void testDoSomething() throws SQLException, ClassNotFoundException {
         new wrapper().dosomething();
         assert(false);
     }
