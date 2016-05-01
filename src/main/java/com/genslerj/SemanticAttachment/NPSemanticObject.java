@@ -44,8 +44,10 @@ public class NPSemanticObject extends SemanticObject {
         else if(children_semantic_objects.get(0).getClass().equals(CDSemanticObject.class)){
             return npSemanticObjectSemanticFunction8;
         }
-        else
+        else if (children_semantic_objects.get(0).getClass().equals(NNSemanticObject.class))
             return npSemanticObjectSemanticFunction11;
+        else
+            return npSemanticObjectSemanticFunction12;
     }
 
     // Proper Noun
@@ -113,4 +115,9 @@ public class NPSemanticObject extends SemanticObject {
     public static Function <NNSemanticObject, NPSemanticObject> npSemanticObjectSemanticFunction11 =
             (NNSemanticObject cdSemanticObject) ->
                     new NPSemanticObject(cdSemanticObject.semanticText);
+
+    // Plural Noun
+    public static Function <NNSSemanticObject, NPSemanticObject> npSemanticObjectSemanticFunction12 =
+            (NNSSemanticObject nnsSemanticObject) ->
+                    new NPSemanticObject(nnsSemanticObject.semanticText);
 }

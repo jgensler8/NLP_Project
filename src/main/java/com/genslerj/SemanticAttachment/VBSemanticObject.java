@@ -12,6 +12,8 @@ import java.util.function.Function;
 public class VBSemanticObject extends SemanticObject {
     public final static String treebankTag = "VB";
 
+    public static SemanticLibrary semanticLibrary = new SemanticLibrary();
+
     public VBSemanticObject(String semanticText){ super(semanticText); }
     public VBSemanticObject(Function semanticFunction){ super(semanticFunction); }
     public VBSemanticObject(SelectQuery semanticQuery){ super(semanticQuery); }
@@ -22,5 +24,5 @@ public class VBSemanticObject extends SemanticObject {
 
     Function<ActualizedSemanticObject, VBSemanticObject> vbSemanticObjectSemanticFunction1 =
             (ActualizedSemanticObject actualizedSemanticObject) ->
-                    new VBSemanticObject(actualizedSemanticObject.semanticFunction);
+                    new VBSemanticObject(semanticLibrary.VBtoSemanticFunction.get(actualizedSemanticObject.semanticText.toLowerCase()));
 }

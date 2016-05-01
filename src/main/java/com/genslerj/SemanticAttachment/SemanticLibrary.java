@@ -3,6 +3,7 @@ package com.genslerj.SemanticAttachment;
 import com.genslerj.DatabaseTermExtractor.DatabaseResources;
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
+import edu.stanford.nlp.ling.tokensregex.SequenceMatchRules;
 
 import java.util.function.Function;
 import java.util.Hashtable;
@@ -13,7 +14,7 @@ import java.util.Map;
  */
 public class SemanticLibrary {
     // VB
-    Function<NPSemanticObject, Function<NPSemanticObject, VBSemanticObject>> win =
+    Function<NPSemanticObject, Function<NPSemanticObject, VBSemanticObject>> vb_win =
             (NPSemanticObject recipient) ->
                     (NPSemanticObject agent) ->
                             new VBSemanticObject(
@@ -25,7 +26,7 @@ public class SemanticLibrary {
                                             .addCondition(BinaryCondition.like(DatabaseResources.movie_name,  recipient.getSemanticTextAsLikeClause() ))
                             );
 
-    Function<NPSemanticObject, Function<NPSemanticObject, VBSemanticObject>> sing =
+    Function<NPSemanticObject, Function<NPSemanticObject, VBSemanticObject>> vb_sing =
             (NPSemanticObject recipient) ->
                     (NPSemanticObject agent) ->
                             new VBSemanticObject(
@@ -37,9 +38,32 @@ public class SemanticLibrary {
                                             .addCondition(BinaryCondition.like(DatabaseResources.movie_name,  recipient.getSemanticTextAsLikeClause() ))
                             );
 
+    Function<NPSemanticObject, Function<NPSemanticObject, VBSemanticObject>> vb_lie =
+            (NPSemanticObject recipient) ->
+                    (NPSemanticObject agent) ->
+                            new VBSemanticObject(
+                                    new SelectQuery()
+                                            .addAllColumns()
+                                            .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Person_Director_Join)
+                                            .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Director_Movie_Join)
+                                            .addCondition(BinaryCondition.like(DatabaseResources.person_name, agent.getSemanticTextAsLikeClause() ))
+                                            .addCondition(BinaryCondition.like(DatabaseResources.movie_name,  recipient.getSemanticTextAsLikeClause() ))
+                            );
+
+    Function<NPSemanticObject, Function<NPSemanticObject, VBSemanticObject>> vb_have =
+            (NPSemanticObject recipient) ->
+                    (NPSemanticObject agent) ->
+                            new VBSemanticObject(
+                                    new SelectQuery()
+                                            .addAllColumns()
+                                            .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Person_Director_Join)
+                                            .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Director_Movie_Join)
+                                            .addCondition(BinaryCondition.like(DatabaseResources.person_name, agent.getSemanticTextAsLikeClause() ))
+                                            .addCondition(BinaryCondition.like(DatabaseResources.movie_name,  recipient.getSemanticTextAsLikeClause() ))
+                            );
 
     // VBD
-    Function<NPSemanticObject, Function<NPSemanticObject, VBDSemanticObject>> directed =
+    Function<NPSemanticObject, Function<NPSemanticObject, VBDSemanticObject>> vbd_directed =
             (NPSemanticObject movie) ->
                     (NPSemanticObject person) ->
                             new VBDSemanticObject(
@@ -51,7 +75,7 @@ public class SemanticLibrary {
                                             .addCondition(BinaryCondition.like(DatabaseResources.movie_name,  movie.getSemanticTextAsLikeClause() ))
                             );
 
-    Function<NPSemanticObject, Function<SemanticObject, VBDSemanticObject>> did =
+    Function<NPSemanticObject, Function<SemanticObject, VBDSemanticObject>> vbd_did =
             (NPSemanticObject recipient) ->
                     (SemanticObject agent) ->
                             new VBDSemanticObject(
@@ -64,7 +88,7 @@ public class SemanticLibrary {
                                             .addCondition(BinaryCondition.like(DatabaseResources.movie_name,  recipient.getSemanticTextAsLikeClause() ))
                             );
 
-    Function<NPSemanticObject, Function<NPSemanticObject, VBDSemanticObject>> won =
+    Function<NPSemanticObject, Function<NPSemanticObject, VBDSemanticObject>> vbd_won =
             (NPSemanticObject recipient) ->
                     (NPSemanticObject agent) ->
                             new VBDSemanticObject(
@@ -76,7 +100,7 @@ public class SemanticLibrary {
                                             .addCondition(BinaryCondition.like(DatabaseResources.movie_name,  recipient.getSemanticTextAsLikeClause() ))
                             );
     // VBZ
-    Function<SemanticObject, Function<NPSemanticObject, VBZSemanticObject>> is =
+    Function<SemanticObject, Function<NPSemanticObject, VBZSemanticObject>> vbz_is =
             (SemanticObject recipient) ->
                     (NPSemanticObject agent) -> {
                         // TODO: deal with PP vs VP
@@ -102,7 +126,19 @@ public class SemanticLibrary {
                         );
                     };
 
-    Function<NPSemanticObject, Function<NPSemanticObject, VBZSemanticObject>> sings =
+    Function<NPSemanticObject, Function<NPSemanticObject, VBZSemanticObject>> vbz_sings =
+            (NPSemanticObject recipient) ->
+                    (NPSemanticObject agent) ->
+                            new VBZSemanticObject(
+                                    new SelectQuery()
+                                            .addAllColumns()
+                                            .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Person_Director_Join)
+                                            .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Director_Movie_Join)
+                                            .addCondition(BinaryCondition.like(DatabaseResources.person_name, agent.getSemanticTextAsLikeClause() ))
+                                            .addCondition(BinaryCondition.like(DatabaseResources.movie_name,  recipient.getSemanticTextAsLikeClause() ))
+                            );
+
+    Function<NPSemanticObject, Function<NPSemanticObject, VBZSemanticObject>> vbz_does =
             (NPSemanticObject recipient) ->
                     (NPSemanticObject agent) ->
                             new VBZSemanticObject(
@@ -115,19 +151,18 @@ public class SemanticLibrary {
                             );
 
     // VBP
-    // TODO: SBAR
-    Function<SemanticObject, VBPSemanticObject> does =
-        (SemanticObject sbar) ->
+    Function<SBARQSemanticObject, VBPSemanticObject> vbp_does =
+        (SBARQSemanticObject sbarqSemanticObject) ->
                 new VBPSemanticObject(
-                        new SelectQuery()
-                                .addAllColumns()
-                                .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Person_Director_Join)
-                                .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Director_Movie_Join)
-                                .addCondition(BinaryCondition.like(DatabaseResources.person_name, sbar.getSemanticTextAsLikeClause() ))
-                                .addCondition(BinaryCondition.like(DatabaseResources.movie_name,  sbar.getSemanticTextAsLikeClause() ))
-                );
+                            new SelectQuery()
+                                    .addAllColumns()
+                                    .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Person_Director_Join)
+                                    .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Director_Movie_Join)
+                                    .addCondition(BinaryCondition.like(DatabaseResources.person_name, sbarqSemanticObject.getSemanticTextAsLikeClause() ))
+                                    .addCondition(BinaryCondition.like(DatabaseResources.movie_name,  sbarqSemanticObject.getSemanticTextAsLikeClause() ))
+                    );
 
-    Function<NPSemanticObject, Function<NPSemanticObject, VBPSemanticObject>> include =
+    Function<NPSemanticObject, Function<NPSemanticObject, VBPSemanticObject>> vbp_include =
             (NPSemanticObject recipient) ->
                     (NPSemanticObject agent) ->
                         new VBPSemanticObject(
@@ -139,25 +174,32 @@ public class SemanticLibrary {
                                         .addCondition(BinaryCondition.like(DatabaseResources.movie_name,  agent.getSemanticTextAsLikeClause() ))
                         );
 
-
-    public Map<String,Function> actualizedWordToSemanticFunction;
+    public Map<String,Function> VBDtoSemanticFunction;
+    public Map<String,Function> VBZtoSemanticFunction;
+    public Map<String,Function> VBtoSemanticFunction;
+    public Map<String,Function> VBPtoSemanticFunction;
     public Map<String,SemanticObject> treebankTagToSemanticObject;
     public SemanticLibrary() {
-        this.actualizedWordToSemanticFunction = new Hashtable<>();
         // VBD
-        this.actualizedWordToSemanticFunction.put("directed", directed);
-        this.actualizedWordToSemanticFunction.put("did", did);
-        this.actualizedWordToSemanticFunction.put("won", won);
+        VBDtoSemanticFunction = new Hashtable<>();
+        this.VBDtoSemanticFunction.put("directed", vbd_directed);
+        this.VBDtoSemanticFunction.put("did", vbd_did);
+        this.VBDtoSemanticFunction.put("won", vbd_won);
         // VBZ
-        this.actualizedWordToSemanticFunction.put("is", is);
-        this.actualizedWordToSemanticFunction.put("sings", sings);
+        VBZtoSemanticFunction = new Hashtable<>();
+        this.VBZtoSemanticFunction.put("is", vbz_is);
+        this.VBZtoSemanticFunction.put("sings", vbz_sings);
+        this.VBZtoSemanticFunction.put("does", vbz_does);
         // VB
-        this.actualizedWordToSemanticFunction.put("win", win);
-        this.actualizedWordToSemanticFunction.put("sing", sing);
+        VBtoSemanticFunction = new Hashtable<>();
+        this.VBtoSemanticFunction.put("win", vb_win);
+        this.VBtoSemanticFunction.put("sing", vb_sing);
+        this.VBtoSemanticFunction.put("lie", vb_lie);
+        this.VBtoSemanticFunction.put("have", vb_have);
         // VBP
-        this.actualizedWordToSemanticFunction.put("does", does);
-        this.actualizedWordToSemanticFunction.put("include", include);
-
+        VBPtoSemanticFunction = new Hashtable<>();
+        this.VBPtoSemanticFunction.put("does", vbp_does);
+        this.VBPtoSemanticFunction.put("include", vbp_include);
 
 
         this.treebankTagToSemanticObject = new Hashtable<>();
@@ -170,6 +212,7 @@ public class SemanticLibrary {
         this.treebankTagToSemanticObject.put(JJSSemanticObject.treebankTag, new JJSSemanticObject(""));
         this.treebankTagToSemanticObject.put(NNPSemanticObject.treebankTag, new NNPSemanticObject(""));
         this.treebankTagToSemanticObject.put(NNSemanticObject.treebankTag, new NNSemanticObject(""));
+        this.treebankTagToSemanticObject.put(NNSSemanticObject.treebankTag, new NNSSemanticObject(""));
         this.treebankTagToSemanticObject.put(NPSemanticObject.treebankTag, new NPSemanticObject(""));
         this.treebankTagToSemanticObject.put(PPSemanticObject.treebankTag, new PPSemanticObject(""));
         this.treebankTagToSemanticObject.put(ROOTSemanticObject.treebankTag, new ROOTSemanticObject(""));
@@ -185,6 +228,7 @@ public class SemanticLibrary {
         this.treebankTagToSemanticObject.put(WDTSemanticObject.treebankTag, new WDTSemanticObject(""));
         this.treebankTagToSemanticObject.put(WPSemanticObject.treebankTag, new WPSemanticObject(""));
         this.treebankTagToSemanticObject.put(WHNPSemanticObject.treebankTag, new WHNPSemanticObject(""));
+        this.treebankTagToSemanticObject.put(WHPPSemanticObject.treebankTag, new WHPPSemanticObject(""));
         this.treebankTagToSemanticObject.put(endOfSentanceSemanticObject.treebankTag, new endOfSentanceSemanticObject(""));
     }
 }

@@ -23,6 +23,8 @@ public class SQSemanticObject extends SemanticObject {
                 return sqSemanticObjectSemanticFunction5;
             else if(children_semantic_objects.get(2).getClass().equals(NPSemanticObject.class))
                 return sqSemanticObjectSemanticFunction1;
+            else if (children_semantic_objects.get(2).getClass().equals(VPSemanticObject.class))
+                return sqSemanticObjectSemanticFunction5;
             else
                 return sqSemanticObjectSemanticFunction2;
         }
@@ -40,6 +42,12 @@ public class SQSemanticObject extends SemanticObject {
                                 SemanticObject intermediateSemanticObject = (SemanticObject) intermediateSemanticFunction.apply(npSemanticObject2);
                               return new SQSemanticObject(intermediateSemanticObject.semanticQuery);
                             };
+
+    public static Function<VBZSemanticObject, Function<NPSemanticObject, Function<VPSemanticObject, SQSemanticObject>>> sqSemanticObjectSemanticFunction6 =
+            (VBZSemanticObject vbzSemanticObject) ->
+                (NPSemanticObject npSemanticObject) ->
+                    (VPSemanticObject vpSemanticObject) ->
+                        new SQSemanticObject((Function) vbzSemanticObject.semanticFunction.apply(npSemanticObject));
 
     public static Function<VBZSemanticObject, Function<NPSemanticObject, Function<ADVPSemanticObject, Function<NPSemanticObject, SQSemanticObject>>>> sqSemanticObjectSemanticFunction2 =
             (VBZSemanticObject vbzSemanticObject) ->

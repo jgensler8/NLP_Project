@@ -17,10 +17,21 @@ public class SBARSemanticObject extends SemanticObject {
     public SBARSemanticObject(SelectQuery semanticQuery){ super(semanticQuery); }
 
     public Function getCreationFunction(Tree t, List<SemanticObject> children_semantic_objects) {
-        return sbarSemanticObjectSemanticFunction1;
+        if(children_semantic_objects.get(0).getClass().equals(SSemanticObject.class))
+            return sbarSemanticObjectSemanticFunction1;
+        else
+            return sbarSemanticObjectSemanticFunction2;
     }
 
     public static Function<SSemanticObject, SBARSemanticObject> sbarSemanticObjectSemanticFunction1 =
             (SSemanticObject sSemanticObject) ->
                     new SBARSemanticObject(sSemanticObject.semanticQuery);
+
+    public static Function<WHNPSemanticObject, Function<SSemanticObject, SBARSemanticObject>> sbarSemanticObjectSemanticFunction2 =
+            (WHNPSemanticObject whnpSemanticObject) ->
+                    (SSemanticObject sSemanticObject) -> {
+                        NPSemanticObject npSemanticObject = new NPSemanticObject("*");
+                        SemanticObject semanticObject = (SemanticObject) sSemanticObject.semanticFunction.apply(npSemanticObject);
+                        return new SBARSemanticObject( semanticObject.semanticQuery);
+                    };
 }

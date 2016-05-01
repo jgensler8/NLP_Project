@@ -12,6 +12,8 @@ import java.util.function.Function;
 public class VBZSemanticObject extends SemanticObject {
     public final static String treebankTag = "VBZ";
 
+    public static SemanticLibrary semanticLibrary = new SemanticLibrary();
+
     public VBZSemanticObject(String semanticText){ super(semanticText); }
     public VBZSemanticObject(Function semanticFunction){ super(semanticFunction); }
     public VBZSemanticObject(SelectQuery semanticQuery){ super(semanticQuery); }
@@ -22,5 +24,6 @@ public class VBZSemanticObject extends SemanticObject {
     }
 
     public static Function<ActualizedSemanticObject, VBZSemanticObject> vbzSemanticObjectSemanticFunction1 =
-            (ActualizedSemanticObject actualizedSemanticObject) -> new VBZSemanticObject(actualizedSemanticObject.semanticFunction );
+            (ActualizedSemanticObject actualizedSemanticObject) -> new VBZSemanticObject(
+                    semanticLibrary.VBZtoSemanticFunction.get(actualizedSemanticObject.semanticText.toLowerCase()));
 }

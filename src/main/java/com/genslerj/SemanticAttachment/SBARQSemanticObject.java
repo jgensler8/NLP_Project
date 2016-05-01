@@ -18,11 +18,22 @@ public class SBARQSemanticObject extends SemanticObject {
 
     @Override
     public Function getCreationFunction(Tree t, List<SemanticObject> children_semantic_objects) {
-        return sbarqSemanticObjectSemanticFunction1;
+        if(children_semantic_objects.get(0).getClass().equals(WHNPSemanticObject.class))
+            return sbarqSemanticObjectSemanticFunction1;
+        else
+            return sbarqSemanticObjectSemanticFunction2;
     }
 
     public static Function<WHNPSemanticObject, Function<SQSemanticObject, SBARQSemanticObject>> sbarqSemanticObjectSemanticFunction1 =
             (WHNPSemanticObject wpSemanticObject) ->
+                    (SQSemanticObject sqSemanticObject) -> {
+                        NPSemanticObject npSemanticObject = new NPSemanticObject("*");
+                        SemanticObject semanticObject = (SemanticObject) sqSemanticObject.semanticFunction.apply(npSemanticObject);
+                        return new SBARQSemanticObject(semanticObject.semanticQuery);
+                    };
+
+    public static Function<WHPPSemanticObject, Function<SQSemanticObject, SBARQSemanticObject>> sbarqSemanticObjectSemanticFunction2 =
+            (WHPPSemanticObject wpSemanticObject) ->
                     (SQSemanticObject sqSemanticObject) -> {
                         NPSemanticObject npSemanticObject = new NPSemanticObject("*");
                         SemanticObject semanticObject = (SemanticObject) sqSemanticObject.semanticFunction.apply(npSemanticObject);

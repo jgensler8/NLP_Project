@@ -21,8 +21,12 @@ public class WHNPSemanticObject extends SemanticObject {
     public Function getCreationFunction(Tree t, List<SemanticObject> children_semantic_objects) {
         if(children_semantic_objects.get(0).getClass().equals(WPSemanticObject.class))
             return whnpSemanticObjectSemanticFunction1;
-        else if (children_semantic_objects.get(0).getClass().equals(WDTSemanticObject.class))
-            return whnpSemanticObjectSemanticFunction2;
+        else if (children_semantic_objects.get(0).getClass().equals(WDTSemanticObject.class)) {
+            if(children_semantic_objects.size() == 1)
+                return whnpSemanticObjectSemanticFunction2;
+            else
+                return whnpSemanticObjectSemanticFunction4;
+        }
         else
             return whnpSemanticObjectSemanticFunction3;
     }
@@ -34,6 +38,11 @@ public class WHNPSemanticObject extends SemanticObject {
     public static Function<WDTSemanticObject, WHNPSemanticObject> whnpSemanticObjectSemanticFunction2 =
             (WDTSemanticObject wpSemanticObject) ->
                     new WHNPSemanticObject(wpSemanticObject.semanticText);
+
+    public static Function<WDTSemanticObject, Function<NNSemanticObject, WHNPSemanticObject>> whnpSemanticObjectSemanticFunction4 =
+            (WDTSemanticObject wpSemanticObject) ->
+                    (NNSemanticObject nnSemanticObject) ->
+                        new WHNPSemanticObject(nnSemanticObject.semanticText);
 
     public static Function<WHNPSemanticObject, Function<PPSemanticObject, WHNPSemanticObject>> whnpSemanticObjectSemanticFunction3 =
             (WHNPSemanticObject wpSemanticObject) ->
