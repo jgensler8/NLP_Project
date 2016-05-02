@@ -36,8 +36,10 @@ public class VPSemanticObject extends SemanticObject {
         else if(children_semantic_objects.get(0).getClass().equals(VBSemanticObject.class)){
             if(children_semantic_objects.size() == 1)
                 return vpSemanticObjectSemanticFunction9;
-            else
+            else if(children_semantic_objects.get(1).getClass().equals(NPSemanticObject.class))
                 return vpSemanticObjectSemanticFunction5;
+            else
+                return vpSemanticObjectSemanticFunction11;
         }
         else return vpSemanticObjectSemanticFunction6;
     }
@@ -88,6 +90,13 @@ public class VPSemanticObject extends SemanticObject {
             (VBSemanticObject vbSemanticObject) ->
                     (NPSemanticObject npSemanticObject) ->
                             new VPSemanticObject((Function) vbSemanticObject.semanticFunction.apply(npSemanticObject));
+
+    public static Function<VBSemanticObject, Function<PPSemanticObject, VPSemanticObject>> vpSemanticObjectSemanticFunction11 =
+            (VBSemanticObject vbSemanticObject) ->
+                    (PPSemanticObject ppSemanticObject) -> {
+                        NPSemanticObject npSemanticObject = new NPSemanticObject(ppSemanticObject.semanticText);
+                        return new VPSemanticObject((Function) vbSemanticObject.semanticFunction.apply(npSemanticObject));
+                    };
 
     public static Function<VBSemanticObject, VPSemanticObject> vpSemanticObjectSemanticFunction9 =
             (VBSemanticObject vbSemanticObject) ->

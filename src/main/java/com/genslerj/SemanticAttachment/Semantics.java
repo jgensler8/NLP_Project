@@ -3,6 +3,9 @@ package com.genslerj.SemanticAttachment;
 import com.genslerj.DatabaseTermExtractor.DatabaseQueryAnswerer;
 import com.genslerj.DatabaseTermExtractor.DatabaseResources;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbJoin;
+import com.sun.corba.se.impl.encoding.OSFCodeSetRegistry;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -23,18 +26,23 @@ public interface Semantics<T> {
 
 class wrapper {
     public void dosomething() throws SQLException, ClassNotFoundException {
-        SelectQuery query =
-                new SelectQuery()
+//        DbJoin Oscar_Person_Join = new DbJoin(null,
+//                DatabaseResources.oscarTable,
+//                DatabaseResources.personTable,
+//                new DbColumn[]{DatabaseResources.oscar_person_id},
+//                new DbColumn[]{DatabaseResources.person_id});
+//
+//        SelectQuery query =
+//                new SelectQuery()
 //                        .addAllColumns()
-                        .addColumns(DatabaseResources.person_name)
-                        .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Person_Director_Join)
-                        .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Director_Movie_Join)
-                        .validate();
-        System.out.println(query);
-
-        DatabaseQueryAnswerer moviesDatabaseQueryAnswerer;
-        moviesDatabaseQueryAnswerer = new DatabaseQueryAnswerer(DatabaseResources.MOVIES_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, "movies");
-        List<String> result = moviesDatabaseQueryAnswerer.runTopNResultQuery(query, 1);
-        System.out.println(result);
+//                        .addColumns(DatabaseResources.person_name)
+//                        .addJoins(SelectQuery.JoinType.INNER, Oscar_Person_Join)
+//                        .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Director_Movie_Join)
+//                        .validate();
+//        System.out.println(query);
+//        DatabaseQueryAnswerer moviesDatabaseQueryAnswerer;
+//        moviesDatabaseQueryAnswerer = new DatabaseQueryAnswerer(DatabaseResources.MOVIES_CONNECTION_STRING, DatabaseResources.DATABASE_NAME, "movies");
+//        List<String> result = moviesDatabaseQueryAnswerer.runTopNResultQuery(query, 1);
+//        System.out.println(result);
     }
 }

@@ -27,7 +27,7 @@ public class SBARQSemanticObject extends SemanticObject {
     public static Function<WHNPSemanticObject, Function<SQSemanticObject, SBARQSemanticObject>> sbarqSemanticObjectSemanticFunction1 =
             (WHNPSemanticObject wpSemanticObject) ->
                     (SQSemanticObject sqSemanticObject) -> {
-                        NPSemanticObject npSemanticObject = new NPSemanticObject("*");
+                        NPSemanticObject npSemanticObject = new NPSemanticObject("");
                         SemanticObject semanticObject = (SemanticObject) sqSemanticObject.semanticFunction.apply(npSemanticObject);
                         return new SBARQSemanticObject(semanticObject.semanticQuery);
                     };
@@ -35,7 +35,7 @@ public class SBARQSemanticObject extends SemanticObject {
     public static Function<WHPPSemanticObject, Function<SQSemanticObject, SBARQSemanticObject>> sbarqSemanticObjectSemanticFunction2 =
             (WHPPSemanticObject wpSemanticObject) ->
                     (SQSemanticObject sqSemanticObject) -> {
-                        NPSemanticObject npSemanticObject = new NPSemanticObject("*");
+                        NPSemanticObject npSemanticObject = new NPSemanticObject("");
                         SemanticObject semanticObject = (SemanticObject) sqSemanticObject.semanticFunction.apply(npSemanticObject);
                         return new SBARQSemanticObject(semanticObject.semanticQuery);
                     };

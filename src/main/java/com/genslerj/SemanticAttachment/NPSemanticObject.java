@@ -1,5 +1,7 @@
 package com.genslerj.SemanticAttachment;
 
+import com.genslerj.DatabaseTermExtractor.DatabaseResources;
+import com.healthmarketscience.sqlbuilder.SelectQuery;
 import edu.stanford.nlp.trees.Tree;
 
 import java.util.List;
@@ -13,6 +15,7 @@ public class NPSemanticObject extends SemanticObject {
 
     public NPSemanticObject(String semanticText){ super(semanticText); }
     public NPSemanticObject(Function semanticFunction){ super(semanticFunction); }
+    public NPSemanticObject(SelectQuery semanticQuery){ super(semanticQuery); }
 
     public Function getCreationFunction(Tree t, List<SemanticObject> children_semantic_objects) {
         if(children_semantic_objects.get(0).getClass().equals(DTSemanticObject.class)) {
@@ -58,9 +61,13 @@ public class NPSemanticObject extends SemanticObject {
     // Determiner + Common Noun
     public static Function<DTSemanticObject, Function<NNSemanticObject, NPSemanticObject>> npSemanticObjectSemanticFunction2 =
             (DTSemanticObject dtSemanticObject) ->
-                    (NNSemanticObject nnSemanticObject) ->
-                            new NPSemanticObject(nnSemanticObject.semanticText);
-//                                    new NPSemanticObject(String.format("SELECT q.name FROM Person AS q WHERE q.name LIKE '%%%s%%'", nnSemanticObject.semanticText));
+                    (NNSemanticObject nnSemanticObject) -> {
+                        // TODO: some sort of domain resolution
+                        return new NPSemanticObject(new SelectQuery()
+                                .addAllColumns()
+                                .addFromTable(DatabaseResources.actorTable));
+                    };
+
     // Determiner + Proper Noun
     public static Function<DTSemanticObject, Function<NNPSemanticObject, NPSemanticObject>> npSemanticObjectSemanticFunction3 =
             (DTSemanticObject dtSemanticObject) ->
@@ -76,14 +83,22 @@ public class NPSemanticObject extends SemanticObject {
     public static Function<DTSemanticObject, Function<JJSemanticObject, Function<NNSemanticObject, NPSemanticObject>>> npSemanticObjectSemanticFunction9 =
             (DTSemanticObject dtSemanticObject) ->
                     (JJSemanticObject jjSemanticObject) ->
-                            (NNSemanticObject nnSemanticObject2) ->
-                                    new NPSemanticObject(String.format("%s", nnSemanticObject2.semanticText));
+                            (NNSemanticObject nnSemanticObject2) -> {
+                                // TODO: some sort of domain resolution
+                                return new NPSemanticObject(new SelectQuery()
+                                        .addAllColumns()
+                                        .addFromTable(DatabaseResources.actorTable));
+                            };
     // Determiner + Adjective (Superlative) + Common Noun
     public static Function<DTSemanticObject, Function<JJSSemanticObject, Function<NNSemanticObject, NPSemanticObject>>> npSemanticObjectSemanticFunction10 =
             (DTSemanticObject dtSemanticObject) ->
                     (JJSSemanticObject jjSemanticObject) ->
-                            (NNSemanticObject nnSemanticObject2) ->
-                                    new NPSemanticObject(String.format("%s", nnSemanticObject2.semanticText));
+                            (NNSemanticObject nnSemanticObject2) -> {
+                                // TODO: some sort of domain resolution
+                                return new NPSemanticObject(new SelectQuery()
+                                        .addAllColumns()
+                                        .addFromTable(DatabaseResources.actorTable));
+                            };
 
 
 

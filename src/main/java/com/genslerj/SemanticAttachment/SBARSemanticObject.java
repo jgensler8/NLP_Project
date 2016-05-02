@@ -30,7 +30,7 @@ public class SBARSemanticObject extends SemanticObject {
     public static Function<WHNPSemanticObject, Function<SSemanticObject, SBARSemanticObject>> sbarSemanticObjectSemanticFunction2 =
             (WHNPSemanticObject whnpSemanticObject) ->
                     (SSemanticObject sSemanticObject) -> {
-                        NPSemanticObject npSemanticObject = new NPSemanticObject("*");
+                        NPSemanticObject npSemanticObject = new NPSemanticObject("");
                         SemanticObject semanticObject = (SemanticObject) sSemanticObject.semanticFunction.apply(npSemanticObject);
                         return new SBARSemanticObject( semanticObject.semanticQuery);
                     };
