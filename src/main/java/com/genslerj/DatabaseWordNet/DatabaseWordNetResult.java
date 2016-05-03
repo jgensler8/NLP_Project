@@ -26,7 +26,6 @@ public class DatabaseWordNetResult {
 //        return category;
 //    }
 
-    // TODO: Oscar
     public String[] getRelatedStrings() {
         return this.relatedStrings;
     }

@@ -23,4 +23,9 @@ abstract public class SemanticObject {
     public String getSemanticTextAsLikeClause() { return String.format("%%%s%%", this.semanticText); }
     public SelectQuery getSemanticQuery() { return this.semanticQuery; }
     abstract public Function getCreationFunction(Tree t, List<SemanticObject> children_semantic_objects);
+
+    public static final int defaultInitializedQueryLength = new SelectQuery().toString().length();
+    public boolean isSemanticQueryModified() {
+        return this.semanticQuery.toString().length() > defaultInitializedQueryLength;
+    }
 }

@@ -1,9 +1,10 @@
 package com.genslerj.SemanticAttachment;
 
 import com.genslerj.DatabaseTermExtractor.DatabaseResources;
-import com.healthmarketscience.sqlbuilder.BinaryCondition;
-import com.healthmarketscience.sqlbuilder.SelectQuery;
+import com.healthmarketscience.sqlbuilder.*;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 
+import javax.xml.crypto.Data;
 import java.util.function.Function;
 import java.util.Hashtable;
 import java.util.Map;
@@ -15,14 +16,29 @@ public class SemanticLibrary {
     // VB
     Function<NPSemanticObject, Function<NPSemanticObject, VBSemanticObject>> vb_win =
             (NPSemanticObject recipient) ->
-                    (NPSemanticObject agent) ->
-                            new VBSemanticObject(
-                                    new SelectQuery()
-                                            .addAllColumns()
-                                            .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Oscar_Person_Join)
-                                            .addCondition(BinaryCondition.like(DatabaseResources.oscar_type, "%%" ))
-                                            .addCondition(BinaryCondition.like(DatabaseResources.person_name,  agent.getSemanticTextAsLikeClause() ))
-                            );
+                    (NPSemanticObject agent) -> {
+                        Condition recipientCondidition = null;
+                        if(recipient.isSemanticQueryModified()) {
+                            recipientCondidition = new InCondition(DatabaseResources.oscar_movie_id, recipient.semanticQuery);
+                        }
+                        else {
+                            recipientCondidition = BinaryCondition.like(DatabaseResources.oscar_type, "%%" );
+                        }
+                        Condition agentCondition = null;
+                        if(agent.isSemanticQueryModified()) {
+                            agentCondition = new InCondition(DatabaseResources.person_id, agent.semanticQuery);
+                        }
+                        else {
+                            agentCondition = BinaryCondition.like(DatabaseResources.person_name,  agent.getSemanticTextAsLikeClause() );
+                        }
+                        return new VBSemanticObject(
+                                new SelectQuery()
+                                        .addAllColumns()
+                                        .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Oscar_Person_Join)
+                                        .addCondition(recipientCondidition)
+                                        .addCondition(agentCondition)
+                        );
+                    };
 
     Function<NPSemanticObject, Function<NPSemanticObject, VBSemanticObject>> vb_sing =
             (NPSemanticObject recipient) ->
@@ -98,20 +114,39 @@ public class SemanticLibrary {
 
     Function<NPSemanticObject, Function<NPSemanticObject, VBDSemanticObject>> vbd_won =
             (NPSemanticObject recipient) ->
-                    (NPSemanticObject agent) ->
-                            new VBDSemanticObject(
-                                    new SelectQuery()
-                                            .addAllColumns()
-                                            .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Oscar_Person_Join)
-                                            .addCondition(BinaryCondition.like(DatabaseResources.oscar_type, "%%" ))
-                                            .addCondition(BinaryCondition.like(DatabaseResources.person_name,  agent.getSemanticTextAsLikeClause() ))
-                            );
+                    (NPSemanticObject agent) -> {
+                        Condition recipientCondidition = null;
+                        if(recipient.isSemanticQueryModified()) {
+                            // TODO: NPHelper
+                            recipientCondidition = new InCondition(DatabaseResources.oscar_person_id, recipient.semanticQuery);
+                            recipientCondidition = new InCondition(DatabaseResources.oscar_movie_id, recipient.semanticQuery);
+                        }
+                        else {
+                            recipientCondidition = BinaryCondition.like(DatabaseResources.oscar_type, "%%" );
+                        }
+                        Condition agentCondition = null;
+                        if(agent.isSemanticQueryModified()) {
+                            // TODO: NPHelper
+                            agentCondition = new InCondition(DatabaseResources.person_id, agent.semanticQuery);
+                            agentCondition = new InCondition(DatabaseResources.movie_id, agent.semanticQuery);
+                        }
+                        else {
+                            agentCondition = BinaryCondition.like(DatabaseResources.person_name,  agent.getSemanticTextAsLikeClause() );
+                        }
+                        return new VBDSemanticObject(
+                                new SelectQuery()
+                                        .addAllColumns()
+                                        .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Oscar_Person_Join)
+                                        .addCondition(recipientCondidition)
+                                        .addCondition(agentCondition)
+                        );
+                    };
     // VBZ
     Function<SemanticObject, Function<NPSemanticObject, VBZSemanticObject>> vbz_is =
             (SemanticObject recipient) ->
                     (NPSemanticObject agent) -> {
                         // TODO: deal with PP vs VP
-                        // do some sort of domain resolution
+                        // TODO: Semantic Object or NP to table/join resolution
 
                         /*
                         if recipient.domain is geography

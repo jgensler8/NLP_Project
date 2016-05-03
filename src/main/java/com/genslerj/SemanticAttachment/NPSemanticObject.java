@@ -1,7 +1,10 @@
 package com.genslerj.SemanticAttachment;
 
 import com.genslerj.DatabaseTermExtractor.DatabaseResources;
+import com.healthmarketscience.sqlbuilder.Condition;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 import edu.stanford.nlp.trees.Tree;
 
 import java.util.List;
@@ -62,17 +65,18 @@ public class NPSemanticObject extends SemanticObject {
     public static Function<DTSemanticObject, Function<NNSemanticObject, NPSemanticObject>> npSemanticObjectSemanticFunction2 =
             (DTSemanticObject dtSemanticObject) ->
                     (NNSemanticObject nnSemanticObject) -> {
-                        // TODO: some sort of domain resolution
+                        DbTable table = NNHelper.commonNounToTableName(nnSemanticObject);
+                        DbColumn column = NNHelper.commonNounToColumnName(nnSemanticObject);
                         return new NPSemanticObject(new SelectQuery()
-                                .addAllColumns()
-                                .addFromTable(DatabaseResources.actorTable));
+                                .addColumns(column)
+                                .addFromTable(table));
                     };
 
     // Determiner + Proper Noun
     public static Function<DTSemanticObject, Function<NNPSemanticObject, NPSemanticObject>> npSemanticObjectSemanticFunction3 =
             (DTSemanticObject dtSemanticObject) ->
                     (NNPSemanticObject nnpSemanticObject) ->
-                            new NPSemanticObject(String.format("%s", nnpSemanticObject.semanticText));
+                            new NPSemanticObject(nnpSemanticObject.semanticText);
     // Determiner + Common Noun + Common Noun
     public static Function<DTSemanticObject, Function<NNSemanticObject, Function<NNSemanticObject, NPSemanticObject>>> npSemanticObjectSemanticFunction4 =
             (DTSemanticObject dtSemanticObject) ->
@@ -83,32 +87,50 @@ public class NPSemanticObject extends SemanticObject {
     public static Function<DTSemanticObject, Function<JJSemanticObject, Function<NNSemanticObject, NPSemanticObject>>> npSemanticObjectSemanticFunction9 =
             (DTSemanticObject dtSemanticObject) ->
                     (JJSemanticObject jjSemanticObject) ->
-                            (NNSemanticObject nnSemanticObject2) -> {
-                                // TODO: some sort of domain resolution
-                                return new NPSemanticObject(new SelectQuery()
-                                        .addAllColumns()
-                                        .addFromTable(DatabaseResources.actorTable));
+                            (NNSemanticObject nnSemanticObject) -> {
+                                DbTable table = NNHelper.commonNounToTableName(nnSemanticObject);
+                                Condition condition = AdjectiveHelper.adjectiveAndTableNameToCondition(jjSemanticObject, table);
+                                DbColumn column = NNHelper.commonNounToColumnName(nnSemanticObject);
+                                if(condition == null || column == null || table == null) {
+                                    return new NPSemanticObject(nnSemanticObject.semanticText);
+                                }
+                                else {
+                                    return new NPSemanticObject(new SelectQuery()
+                                            .addColumns(column)
+                                            .addFromTable(table)
+                                            .addCondition(condition));
+                                }
                             };
     // Determiner + Adjective (Superlative) + Common Noun
     public static Function<DTSemanticObject, Function<JJSSemanticObject, Function<NNSemanticObject, NPSemanticObject>>> npSemanticObjectSemanticFunction10 =
             (DTSemanticObject dtSemanticObject) ->
-                    (JJSSemanticObject jjSemanticObject) ->
-                            (NNSemanticObject nnSemanticObject2) -> {
-                                // TODO: some sort of domain resolution
-                                return new NPSemanticObject(new SelectQuery()
-                                        .addAllColumns()
-                                        .addFromTable(DatabaseResources.actorTable));
+                    (JJSSemanticObject jjsSemanticObject) ->
+                            (NNSemanticObject nnSemanticObject) -> {
+                                DbTable table = NNHelper.commonNounToTableName(nnSemanticObject);
+                                Condition condition = AdjectiveHelper.superlativeAndTableNameToCondition(jjsSemanticObject, table);
+                                if(condition == null) {
+                                    return new NPSemanticObject(new SelectQuery()
+                                            .addAllColumns()
+                                            .addFromTable(DatabaseResources.actorTable));
+                                }
+                                else {
+                                    return new NPSemanticObject(new SelectQuery()
+                                            .addAllColumns()
+                                            .addFromTable(DatabaseResources.actorTable));
+                                }
                             };
 
-
-
     // Noun Phrase + Prepositional Phrase
-    // TODO: might have to figure out some sort of SQL
-    // TODO: figure out if NounPhrases will always return subqueries or plain text
     public static Function<NPSemanticObject, Function<PPSemanticObject, NPSemanticObject>> npSemanticObjectSemanticFunction5 =
             (NPSemanticObject npSemanticObject) ->
-                    (PPSemanticObject ppSemanticObject) ->
-                            new NPSemanticObject(String.format("%s", npSemanticObject.semanticText, ppSemanticObject.semanticText));
+                    (PPSemanticObject ppSemanticObject) -> {
+                        Condition condition = PPHelper.getConditionFromPhrase(npSemanticObject, ppSemanticObject);
+                        npSemanticObject.semanticQuery.addCondition(condition);
+                        if(condition == null)
+                            return new NPSemanticObject(npSemanticObject.semanticText);
+                        else
+                            return new NPSemanticObject(npSemanticObject.semanticQuery.addCondition(condition));
+                    };
 
     // Adjective (Superlative) + Common Noun (ignores adjective)
     public static Function<JJSSemanticObject, Function<NNSemanticObject, NPSemanticObject>> npSemanticObjectSemanticFunction6 =

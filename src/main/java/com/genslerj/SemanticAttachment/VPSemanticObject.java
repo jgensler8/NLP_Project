@@ -56,8 +56,9 @@ public class VPSemanticObject extends SemanticObject {
             (VBDSemanticObject vbdSemanticObject) ->
                     (NPSemanticObject npSemanticObject) ->
                             (PPSemanticObject ppSemanticObject) -> {
+                                NPSemanticObject npSemanticObject1_applied = NPSemanticObject.npSemanticObjectSemanticFunction5.apply(npSemanticObject).apply(ppSemanticObject);
                                 VPSemanticObject vp = new VPSemanticObject(vbdSemanticObject.semanticFunction);
-                                vp.semanticFunction = (Function) vp.semanticFunction.apply(npSemanticObject);
+                                vp.semanticFunction = (Function) vp.semanticFunction.apply(npSemanticObject1_applied);
                                 return vp;
                             };
 
@@ -66,8 +67,10 @@ public class VPSemanticObject extends SemanticObject {
                     (NPSemanticObject npSemanticObject) ->
                             (PPSemanticObject ppSemanticObject1) ->
                                     (PPSemanticObject ppSemanticObject2 ) -> {
+                                        NPSemanticObject npSemanticObject1_applied_1 = NPSemanticObject.npSemanticObjectSemanticFunction5.apply(npSemanticObject).apply(ppSemanticObject1);
+                                        NPSemanticObject npSemanticObject1_applied_2 = NPSemanticObject.npSemanticObjectSemanticFunction5.apply(npSemanticObject1_applied_1).apply(ppSemanticObject2);
                                         VPSemanticObject vp = new VPSemanticObject(vbdSemanticObject.semanticFunction);
-                                        vp.semanticFunction = (Function) vp.semanticFunction.apply(npSemanticObject);
+                                        vp.semanticFunction = (Function) vp.semanticFunction.apply(npSemanticObject1_applied_2);
                                         return vp;
                                     };
 
