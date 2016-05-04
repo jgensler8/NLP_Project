@@ -5,6 +5,9 @@ import com.healthmarketscience.sqlbuilder.SelectQuery;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by genslerj on 5/2/16.
  */
@@ -26,7 +29,7 @@ public class NNHelper {
         if(semanticText.contains("winner") || semanticText.contains("actor"))
             return DatabaseResources.person_id;
         else if (semanticText.contains("oscar"))
-            return DatabaseResources.oscar_movie_id;
+            return DatabaseResources.oscar_person_id;
         else if (semanticText.contains("movie"))
             return DatabaseResources.movie_id;
         else

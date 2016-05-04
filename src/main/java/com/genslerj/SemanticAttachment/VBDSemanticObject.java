@@ -1,5 +1,6 @@
 package com.genslerj.SemanticAttachment;
 
+import com.healthmarketscience.sqlbuilder.Query;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
 import edu.stanford.nlp.trees.Tree;
 
@@ -16,7 +17,7 @@ public class VBDSemanticObject extends SemanticObject {
 
     public VBDSemanticObject(String semanticText){ super(semanticText); }
     public VBDSemanticObject(Function semanticFunction){ super(semanticFunction); }
-    public VBDSemanticObject(SelectQuery semanticQuery){ super(semanticQuery); }
+    public VBDSemanticObject(Query semanticQuery){ super(semanticQuery); }
 
     @Override
     public Function getCreationFunction(Tree t, List<SemanticObject> children_semantic_objects) {

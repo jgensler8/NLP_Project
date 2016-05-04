@@ -22,6 +22,7 @@ public class Library {
             new QuestionAnswerPair("Did Swank win the oscar in 2099?",              ANSWER_NO,         Categories.MOVIES),
 //            new QuestionAnswerPair("Shining is by Kubrik?",                     ANSWER_YES,         Categories.MOVIES),
 //            new QuestionAnswerPair("Is Shining by Kubrik?",                     ANSWER_YES,         Categories.MOVIES),
+            new QuestionAnswerPair("A French actor won the oscar in 2012?",     ANSWER_YES, Categories.MOVIES),
             new QuestionAnswerPair("Did a French actor win the oscar in 2012?",     ANSWER_YES, Categories.MOVIES),
             new QuestionAnswerPair("A movie by Spielberg won the oscar for best film?",         ANSWER_UNKNOWN,     Categories.MOVIES),
             new QuestionAnswerPair("Did a movie by Spielberg win the oscar for best film?",         ANSWER_UNKNOWN,     Categories.MOVIES),

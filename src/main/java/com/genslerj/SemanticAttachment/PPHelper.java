@@ -1,14 +1,19 @@
 package com.genslerj.SemanticAttachment;
 
 import com.genslerj.DatabaseTermExtractor.DatabaseResources;
+import com.genslerj.DatabaseTermExtractor.DatabaseTermExtractorResult;
 import com.healthmarketscience.sqlbuilder.BinaryCondition;
+import com.healthmarketscience.sqlbuilder.ComboCondition;
 import com.healthmarketscience.sqlbuilder.Condition;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbJoin;
 
 import javax.xml.crypto.Data;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by genslerj on 5/2/16.
@@ -67,6 +72,20 @@ public class PPHelper {
         if(isProperNoun(ppSemanticObject.semanticText)) {
             return BinaryCondition.like(DatabaseResources.person_name, ppSemanticObject.getSemanticTextAsLikeClause());
         }
+        return null;
+    }
+
+    public static List<DbJoin> getJoinsFromPhrase(NPSemanticObject npSemanticObject, PPSemanticObject ppSemanticObject) {
+        ArrayList<DbJoin> toReturn = new ArrayList<>();
+//        if(npSemanticObject.semanticQuery.toString().toLowerCase().contains("movie")) {
+//            return null;
+//        }
+        if (isProperNoun(ppSemanticObject.semanticText)) {
+            toReturn.add(DatabaseResources.Movie_Actor_Join);
+            toReturn.add(DatabaseResources.Movie_Director_Join);
+            return toReturn;
+        }
+
         return null;
     }
 }

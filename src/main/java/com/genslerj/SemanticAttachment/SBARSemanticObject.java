@@ -1,5 +1,6 @@
 package com.genslerj.SemanticAttachment;
 
+import com.healthmarketscience.sqlbuilder.Query;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
 import edu.stanford.nlp.trees.Tree;
 
@@ -14,7 +15,7 @@ public class SBARSemanticObject extends SemanticObject {
 
     public SBARSemanticObject(String semanticText){ super(semanticText); }
     public SBARSemanticObject(Function semanticFunction){ super(semanticFunction); }
-    public SBARSemanticObject(SelectQuery semanticQuery){ super(semanticQuery); }
+    public SBARSemanticObject(Query semanticQuery){ super(semanticQuery); }
 
     public Function getCreationFunction(Tree t, List<SemanticObject> children_semantic_objects) {
         if(children_semantic_objects.get(0).getClass().equals(SSemanticObject.class))

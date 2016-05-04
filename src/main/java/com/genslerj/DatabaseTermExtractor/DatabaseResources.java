@@ -1,5 +1,7 @@
 package com.genslerj.DatabaseTermExtractor;
 
+import com.healthmarketscience.sqlbuilder.Query;
+import com.healthmarketscience.sqlbuilder.ValidationException;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.*;
 import com.sun.corba.se.impl.encoding.OSFCodeSetRegistry;
 
@@ -60,9 +62,21 @@ public class DatabaseResources {
 
     public static DbJoin Person_Director_Join = new DbJoin(spec, personTable, directorTable, new DbColumn[]{person_id}, new DbColumn[]{director_director_id});
     public static DbJoin Director_Movie_Join = new DbJoin(spec, directorTable, movieTable, new DbColumn[]{director_movie_id}, new DbColumn[]{movie_id});
+    public static DbJoin Movie_Director_Join = new DbJoin(spec, movieTable, directorTable, new DbColumn[]{movie_id}, new DbColumn[]{director_movie_id});
 
     public static DbJoin Person_Actor_Join = new DbJoin(spec, personTable, actorTable, new DbColumn[]{person_id}, new DbColumn[]{actor_actor_id});
     public static DbJoin Actor_Movie_Join = new DbJoin(spec, actorTable, movieTable, new DbColumn[]{actor_movie_id}, new DbColumn[]{movie_id});
+    public static DbJoin Movie_Actor_Join = new DbJoin(spec, movieTable, actorTable, new DbColumn[]{movie_id}, new DbColumn[]{actor_movie_id});
 
     public static DbJoin Oscar_Person_Join = new DbJoin(spec, oscarTable, personTable, new DbColumn[]{oscar_person_id}, new DbColumn[]{person_id});
+    public static DbJoin Oscar_Movie_Join = new DbJoin(spec, oscarTable, movieTable, new DbColumn[]{oscar_movie_id}, new DbColumn[]{movie_id});
+
+    public static boolean isValidQuery(Query q) {
+        try {
+            q.validate();
+            return true;
+        } catch (ValidationException e) {
+            return false;
+        }
+    }
 }

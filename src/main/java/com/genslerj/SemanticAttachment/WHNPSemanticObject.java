@@ -1,5 +1,6 @@
 package com.genslerj.SemanticAttachment;
 
+import com.healthmarketscience.sqlbuilder.Query;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
 import edu.stanford.nlp.trees.Tree;
 import org.joda.time.ReadWritableDateTime;
@@ -15,7 +16,7 @@ public class WHNPSemanticObject extends SemanticObject {
 
     public WHNPSemanticObject(String semanticText){ super(semanticText); }
     public WHNPSemanticObject(Function semanticFunction){ super(semanticFunction); }
-    public WHNPSemanticObject(SelectQuery semanticQuery){ super(semanticQuery); }
+    public WHNPSemanticObject(Query semanticQuery){ super(semanticQuery); }
 
     @Override
     public Function getCreationFunction(Tree t, List<SemanticObject> children_semantic_objects) {

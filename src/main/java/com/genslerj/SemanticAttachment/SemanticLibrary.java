@@ -5,9 +5,9 @@ import com.healthmarketscience.sqlbuilder.*;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
 
 import javax.xml.crypto.Data;
+import java.util.*;
 import java.util.function.Function;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by genslerj on 4/28/16.
@@ -17,27 +17,50 @@ public class SemanticLibrary {
     Function<NPSemanticObject, Function<NPSemanticObject, VBSemanticObject>> vb_win =
             (NPSemanticObject recipient) ->
                     (NPSemanticObject agent) -> {
-                        Condition recipientCondidition = null;
+                        Condition recipientCondition = null;
                         if(recipient.isSemanticQueryModified()) {
-                            recipientCondidition = new InCondition(DatabaseResources.oscar_movie_id, recipient.semanticQuery);
+                            List<DbColumn> recipient_columns = NPHelper.nounPhraseToColumn(recipient);
+                            List<Condition> recipientConditions = new ArrayList<>();
+                            recipient_columns.stream().forEach(
+                                    (DbColumn column) -> recipientConditions.add(new InCondition(column, recipient.semanticQuery)) );
+                            recipientCondition = ComboCondition.or(recipientConditions.toArray(new Condition[recipientConditions.size()]));
                         }
                         else {
-                            recipientCondidition = BinaryCondition.like(DatabaseResources.oscar_type, "%%" );
+                            recipientCondition = BinaryCondition.like(DatabaseResources.oscar_type, "%%" );
                         }
-                        Condition agentCondition = null;
+                        Condition agentCondition= null;
                         if(agent.isSemanticQueryModified()) {
-                            agentCondition = new InCondition(DatabaseResources.person_id, agent.semanticQuery);
+                            List<Condition> agentConditions = new ArrayList<>();
+                            List<DbColumn> agent_columns = NPHelper.nounPhraseToColumn(agent);
+                            agent_columns.stream().forEach(
+                                    (DbColumn column) -> agentConditions.add(new InCondition(column, agent.semanticQuery)) );
+                            agentCondition = ComboCondition.or(agentConditions.toArray(new Condition[agentConditions.size()]));
                         }
                         else {
                             agentCondition = BinaryCondition.like(DatabaseResources.person_name,  agent.getSemanticTextAsLikeClause() );
                         }
-                        return new VBSemanticObject(
-                                new SelectQuery()
-                                        .addAllColumns()
-                                        .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Oscar_Person_Join)
-                                        .addCondition(recipientCondidition)
-                                        .addCondition(agentCondition)
-                        );
+                        SelectQuery part1 = new SelectQuery()
+                                .addAllColumns()
+                                .addFromTable(DatabaseResources.oscarTable)
+                                .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Oscar_Person_Join)
+                                .addCondition(recipientCondition)
+                                .addCondition(agentCondition);
+                        SelectQuery part2 = new SelectQuery()
+                                .addAllColumns()
+                                .addFromTable(DatabaseResources.oscarTable)
+                                .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Oscar_Movie_Join)
+                                .addCondition(recipientCondition)
+                                .addCondition(agentCondition);
+                        // use validate to find the right query
+                        List<SelectQuery> queries = new ArrayList<>(2);
+                        queries.add(part1);
+                        queries.add(part2);
+                        SelectQuery[] valid_queries = queries.stream().filter(q -> DatabaseResources.isValidQuery(q)).toArray(SelectQuery[]::new);
+                        if(valid_queries.length > 1)
+                            return new VBSemanticObject( new UnionQuery( SetOperationQuery.Type.UNION, valid_queries) );
+                        else if(valid_queries.length == 1)
+                            return new VBSemanticObject( valid_queries[0] );
+                        else return new VBSemanticObject("");
                     };
 
     Function<NPSemanticObject, Function<NPSemanticObject, VBSemanticObject>> vb_sing =
@@ -115,31 +138,50 @@ public class SemanticLibrary {
     Function<NPSemanticObject, Function<NPSemanticObject, VBDSemanticObject>> vbd_won =
             (NPSemanticObject recipient) ->
                     (NPSemanticObject agent) -> {
-                        Condition recipientCondidition = null;
+                        Condition recipientCondition = null;
                         if(recipient.isSemanticQueryModified()) {
-                            // TODO: NPHelper
-                            recipientCondidition = new InCondition(DatabaseResources.oscar_person_id, recipient.semanticQuery);
-                            recipientCondidition = new InCondition(DatabaseResources.oscar_movie_id, recipient.semanticQuery);
+                            List<DbColumn> recipient_columns = NPHelper.nounPhraseToColumn(recipient);
+                            List<Condition> recipientConditions = new ArrayList<>();
+                            recipient_columns.stream().forEach(
+                                    (DbColumn column) -> recipientConditions.add(new InCondition(column, recipient.semanticQuery)) );
+                            recipientCondition = ComboCondition.or(recipientConditions.toArray(new Condition[recipientConditions.size()]));
                         }
                         else {
-                            recipientCondidition = BinaryCondition.like(DatabaseResources.oscar_type, "%%" );
+                            recipientCondition = BinaryCondition.like(DatabaseResources.oscar_type, "%%" );
                         }
-                        Condition agentCondition = null;
+                        Condition agentCondition= null;
                         if(agent.isSemanticQueryModified()) {
-                            // TODO: NPHelper
-                            agentCondition = new InCondition(DatabaseResources.person_id, agent.semanticQuery);
-                            agentCondition = new InCondition(DatabaseResources.movie_id, agent.semanticQuery);
+                            List<Condition> agentConditions = new ArrayList<>();
+                            List<DbColumn> agent_columns = NPHelper.nounPhraseToColumn(agent);
+                            agent_columns.stream().forEach(
+                                    (DbColumn column) -> agentConditions.add(new InCondition(column, agent.semanticQuery)) );
+                            agentCondition = ComboCondition.or(agentConditions.toArray(new Condition[agentConditions.size()]));
                         }
                         else {
                             agentCondition = BinaryCondition.like(DatabaseResources.person_name,  agent.getSemanticTextAsLikeClause() );
                         }
-                        return new VBDSemanticObject(
-                                new SelectQuery()
-                                        .addAllColumns()
-                                        .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Oscar_Person_Join)
-                                        .addCondition(recipientCondidition)
-                                        .addCondition(agentCondition)
-                        );
+                        SelectQuery part1 = new SelectQuery()
+                                .addAllColumns()
+                                .addFromTable(DatabaseResources.oscarTable)
+                                .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Oscar_Person_Join)
+                                .addCondition(recipientCondition)
+                                .addCondition(agentCondition);
+                        SelectQuery part2 = new SelectQuery()
+                                .addAllColumns()
+                                .addFromTable(DatabaseResources.oscarTable)
+                                .addJoins(SelectQuery.JoinType.INNER, DatabaseResources.Oscar_Movie_Join)
+                                .addCondition(recipientCondition)
+                                .addCondition(agentCondition);
+                        // use validate to find the right query
+                        List<SelectQuery> queries = new ArrayList<>(2);
+                        queries.add(part1);
+                        queries.add(part2);
+                        SelectQuery[] valid_queries = queries.stream().filter(q -> DatabaseResources.isValidQuery(q)).toArray(SelectQuery[]::new);
+                        if(valid_queries.length > 1)
+                            return new VBDSemanticObject( new UnionQuery( SetOperationQuery.Type.UNION, valid_queries) );
+                        else if(valid_queries.length == 1)
+                            return new VBDSemanticObject( valid_queries[0] );
+                        else return new VBDSemanticObject("");
                     };
     // VBZ
     Function<SemanticObject, Function<NPSemanticObject, VBZSemanticObject>> vbz_is =

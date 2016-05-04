@@ -1,5 +1,6 @@
 package com.genslerj.SemanticAttachment;
 
+import com.healthmarketscience.sqlbuilder.Query;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
 import edu.stanford.nlp.tagger.maxent.ASBCunkDict;
 import edu.stanford.nlp.trees.Tree;
@@ -15,7 +16,7 @@ public class NNSSemanticObject extends SemanticObject {
 
     public NNSSemanticObject(String semanticText){ super(semanticText); }
     public NNSSemanticObject(Function semanticFunction){ super(semanticFunction); }
-    public NNSSemanticObject(SelectQuery semanticQuery){ super(semanticQuery); }
+    public NNSSemanticObject(Query semanticQuery){ super(semanticQuery); }
 
     @Override
     public Function getCreationFunction(Tree t, List<SemanticObject> children_semantic_objects) {

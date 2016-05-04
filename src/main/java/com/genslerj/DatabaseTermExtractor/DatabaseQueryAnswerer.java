@@ -1,5 +1,6 @@
 package com.genslerj.DatabaseTermExtractor;
 
+import com.healthmarketscience.sqlbuilder.Query;
 import com.healthmarketscience.sqlbuilder.SelectQuery;
 
 import java.sql.*;
@@ -22,12 +23,12 @@ public class DatabaseQueryAnswerer {
         this.category = category;
     }
 
-    public boolean runExistsQuery(SelectQuery query) throws SQLException {
+    public boolean runExistsQuery(Query query) throws SQLException {
         ResultSet rs = this.runQuery(query.toString());
         return rs.next();
     }
 
-    public List<String> runTopNResultQuery(SelectQuery query, int topN) throws SQLException {
+    public List<String> runTopNResultQuery(Query query, int topN) throws SQLException {
         ResultSet rs = this.runQuery(query.toString());
         ArrayList<String> results = new ArrayList<>();
         while(rs.next()) {
@@ -37,7 +38,7 @@ public class DatabaseQueryAnswerer {
     }
 
     public ResultSet runQuery(String query) throws SQLException {
-        System.out.println(query);
+//        System.out.println(query);
         Statement statement = this.c.createStatement();
         statement.setQueryTimeout(30);  // set timeout to 30 sec.
         return statement.executeQuery( query );

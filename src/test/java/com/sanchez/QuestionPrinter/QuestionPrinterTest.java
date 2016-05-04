@@ -3,8 +3,6 @@ package com.sanchez.QuestionPrinter;
 import com.genslerj.QuestionAnswerLibrary.Categories;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by genslerj on 4/10/16.
  */
@@ -18,7 +16,7 @@ public class QuestionPrinterTest {
     public void testQuestionPrinterShouldPrintQuestion() {
         QuestionPrinter printer = new QuestionPrinter();
 
-        String output = QuestionPrinter.getQuestionOutput(question, category, parseTree);
+        String output = QuestionPrinter.getPart1Output(question, category, parseTree);
 
         assert(output.contains(question));
     }
@@ -27,7 +25,7 @@ public class QuestionPrinterTest {
     public void testQuestionPrinterShouldPrintCategory() {
         QuestionPrinter printer = new QuestionPrinter();
 
-        String output = QuestionPrinter.getQuestionOutput(question, category, parseTree);
+        String output = QuestionPrinter.getPart1Output(question, category, parseTree);
 
         assert(output.contains(category));
     }
@@ -36,7 +34,7 @@ public class QuestionPrinterTest {
     public void testQuestionPrinterShouldPrintParseTree() {
         QuestionPrinter printer = new QuestionPrinter();
 
-        String output = QuestionPrinter.getQuestionOutput(question, category, parseTree);
+        String output = QuestionPrinter.getPart1Output(question, category, parseTree);
 
         assert(output.contains(parseTree));
     }

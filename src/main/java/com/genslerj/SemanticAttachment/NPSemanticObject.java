@@ -1,9 +1,9 @@
 package com.genslerj.SemanticAttachment;
 
 import com.genslerj.DatabaseTermExtractor.DatabaseResources;
-import com.healthmarketscience.sqlbuilder.Condition;
-import com.healthmarketscience.sqlbuilder.SelectQuery;
+import com.healthmarketscience.sqlbuilder.*;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbColumn;
+import com.healthmarketscience.sqlbuilder.dbspec.basic.DbJoin;
 import com.healthmarketscience.sqlbuilder.dbspec.basic.DbTable;
 import edu.stanford.nlp.trees.Tree;
 
@@ -18,7 +18,7 @@ public class NPSemanticObject extends SemanticObject {
 
     public NPSemanticObject(String semanticText){ super(semanticText); }
     public NPSemanticObject(Function semanticFunction){ super(semanticFunction); }
-    public NPSemanticObject(SelectQuery semanticQuery){ super(semanticQuery); }
+    public NPSemanticObject(Query semanticQuery){ super(semanticQuery); }
 
     public Function getCreationFunction(Tree t, List<SemanticObject> children_semantic_objects) {
         if(children_semantic_objects.get(0).getClass().equals(DTSemanticObject.class)) {
@@ -124,12 +124,23 @@ public class NPSemanticObject extends SemanticObject {
     public static Function<NPSemanticObject, Function<PPSemanticObject, NPSemanticObject>> npSemanticObjectSemanticFunction5 =
             (NPSemanticObject npSemanticObject) ->
                     (PPSemanticObject ppSemanticObject) -> {
+                        // TODO: Prep phrase might invovle another table in the query
                         Condition condition = PPHelper.getConditionFromPhrase(npSemanticObject, ppSemanticObject);
-                        npSemanticObject.semanticQuery.addCondition(condition);
+                        ((SelectQuery)npSemanticObject.semanticQuery).addCondition(condition);
                         if(condition == null)
                             return new NPSemanticObject(npSemanticObject.semanticText);
-                        else
-                            return new NPSemanticObject(npSemanticObject.semanticQuery.addCondition(condition));
+                        else {
+                            List<DbJoin> joins = PPHelper.getJoinsFromPhrase(npSemanticObject, ppSemanticObject);
+                            if(joins == null)
+                                return new NPSemanticObject(((SelectQuery) npSemanticObject.semanticQuery).addCondition(condition));
+                            else {
+                                SelectQuery[] queries = joins.stream()
+                                        .map(j -> ((SelectQuery) npSemanticObject.semanticQuery)
+                                                    .addJoins(SelectQuery.JoinType.INNER, j) )
+                                        .toArray(SelectQuery[]::new);
+                                return new NPSemanticObject(new UnionQuery(SetOperationQuery.Type.UNION, queries));
+                            }
+                        }
                     };
 
     // Adjective (Superlative) + Common Noun (ignores adjective)
